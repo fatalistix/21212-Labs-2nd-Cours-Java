@@ -1,7 +1,9 @@
 package interpreter.commands.base;
 
+import interpreter.patterns.factory.FactoryObjectCreatingException;
+
 public interface Command {
-    public void debug(ExecutionContext ec, CommandManager cm) throws CommandDebugException;
+    public void debug(ExecutionContext ec, CommandManager cm) throws CommandDebugException, FactoryObjectCreatingException;
     public void run  (ExecutionContext ec, CommandManager cm) throws CommandRuntimeException;
 
     public class CommandDebugException extends Exception {

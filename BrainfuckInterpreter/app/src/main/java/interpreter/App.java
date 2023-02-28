@@ -4,7 +4,10 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
-import interpreter.commands.base.CommandManagerException;
+import interpreter.Brainfuck.BrainfuckCreatingException;
+import interpreter.Brainfuck.BrainfuckDebugException;
+import interpreter.Brainfuck.BrainfuckIncompleteCommandsInputException;
+import interpreter.Brainfuck.BrainfuckRuntimeException;
 
 public class App {
     private static InputStream in  = System.in;
@@ -24,18 +27,31 @@ public class App {
                     brainfuck.reset();
                     continue;
                 }
-                brainfuck.debug(input);
+                
+                try {
+                    brainfuck.debug(input);
+                } catch (BrainfuckDebugException e) {
+                    out.println("[DERR] > " + e.getMessage());
+                } catch (BrainfuckIncompleteCommandsInputException e) {
+                    // TODO Auto-generated catch block
+                    out.println("[NOTH] > Now it do nothing, because never reachable");
+                }
                 
                 out.print("[Data] > ");
                 input = sc.nextLine();
-                out.println("[Out~] > " + brainfuck.execute(input));
+                try {
+                    out.println("[Out~] > " + brainfuck.execute(input));
+                } catch (BrainfuckRuntimeException e) {
+                    out.println("[RERR] > " + e.getMessage());
+                }
             }
-
-        } catch (CommandManagerException e) {
-            out.println("Fatal error: " + e.getMessage());
+        } catch (BrainfuckCreatingException e) {
+            out.println("[CERR] > Error during creating a Brainfuck Interpreter");
             return;
-        } 
-
-        out.println("Exited without errors");
+        } catch (Exception e) {
+            out.println("[FAIL] > UNEXPECTED ERROR " + e.getClass().getSimpleName() + ": " + e.getMessage());
+            return;
+        }
+        out.println("[SUCC] > Exited without errors");
     }
 }
