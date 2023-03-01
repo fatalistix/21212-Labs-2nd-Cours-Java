@@ -34,8 +34,9 @@ public class App {
                     out.println("[DERR] > " + e.getMessage());
                     continue;
                 } catch (BrainfuckIncompleteCommandsInputException e) {
-                    // TODO Auto-generated catch block
-                    out.println("[NOTH] > Now it do nothing, because never reachable");
+                    out.println("[DERR] > Incomplete statement: " + e.getMessage());
+                    continue;
+                    // out.println("[NOTH] > Now it do nothing, because never reachable");
                 }
                 
                 out.print("[Data] > ");
@@ -50,7 +51,7 @@ public class App {
             out.println("[CERR] > Error during creating a Brainfuck Interpreter");
             return;
         } catch (Exception e) {
-            out.println("[FAIL] > UNEXPECTED ERROR " + e.getClass().getSimpleName() + ": " + e.getMessage());
+            out.println("\n[FAIL] > UNEXPECTED ERROR " + /* e.getClass().getSimpleName() +*/ ": " + e.getMessage());
             return;
         }
         out.println("[SUCC] > Exited without errors");

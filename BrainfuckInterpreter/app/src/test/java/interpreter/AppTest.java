@@ -3,12 +3,24 @@
  */
 package interpreter;
 
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
 class AppTest {
-    @Test void appHasAGreeting() {
-        App classUnderTest = new App();
-        // assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
+    static Brainfuck bf;
+    
+    @BeforeAll
+    static void initBF() {
+        assertDoesNotThrow(() -> { bf = new Brainfuck(); });
+    }
+
+    @ParameterizedTest
+    @ValueSource(chars = {'+', '-', ',', '.', '>', '<'})
+    @Tag("Every Registered Command to be Recognized")
+    void inputSingleCommand(char code) {
+        assertDoesNotThrow(() -> { bf.debug(String.valueOf(code)); });
     }
 }

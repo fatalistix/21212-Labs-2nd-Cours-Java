@@ -35,7 +35,7 @@ public class ExecutionContext {
     }
 
     // Methods
-    public void resetInputCommands() {
+    public void resetToLastMarkedCommand() {
         try {
             inputCommands.reset();
         } catch (IOException e) {
@@ -54,6 +54,30 @@ public class ExecutionContext {
             throw new IllegalArgumentException("Not enough input values for execute");
         }
         memory[memoryPointer] = (char) buf; //! ????
+    }
+
+    public void markCommand() {
+        try {
+            inputCommands.mark(0);
+        } catch (IOException e) {
+            //? It should never throw it, but if it will we will catch it and do nothing
+        }
+    }
+
+    public void demarkCommand() {
+        inputCommands.demark();
+    }
+
+    public void resetToStartCommand() {
+        inputCommands.resetToStart();
+    }
+
+    public void resetToFirstMarkedCommand() {
+        inputCommands.resetToFirst();
+    }
+
+    public char readFromCeil() {
+        return memory[memoryPointer];
     }
 
     public void writeFromCeilToOutput() {

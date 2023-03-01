@@ -2,6 +2,7 @@ package interpreter.patterns.readers;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class StringReaderWithLoading extends Reader {
@@ -9,7 +10,8 @@ public class StringReaderWithLoading extends Reader {
     private String str;
     private int length;
     private int next = 0;
-    private int mark = 0;
+    // private int mark = 0;
+    private ArrayList <Integer> marks = new ArrayList<>();
 
     public StringReaderWithLoading(String s) {
         this.str = s;
@@ -69,7 +71,8 @@ public class StringReaderWithLoading extends Reader {
         }
         synchronized (lock) {
             ensureOpen();
-            mark = next;
+            // mark = next;
+            marks.add(next);
         }
     }
 
@@ -83,7 +86,8 @@ public class StringReaderWithLoading extends Reader {
     public void reset() throws IOException {
         synchronized (lock) {
             ensureOpen();
-            next = mark;
+            next = marks.get(marks.size() - 1);
+            demark(); //??????
         }
     }
 
@@ -94,7 +98,7 @@ public class StringReaderWithLoading extends Reader {
     }
     
 
-    // two methods from xf, other from StreamReader
+    // methods from xf, other from StreamReader + modified
     public void toLoad(String s) throws IOException {
         synchronized (lock) {
             ensureOpen();
@@ -110,10 +114,28 @@ public class StringReaderWithLoading extends Reader {
     }
 
     public boolean isMarked() {
-        return (mark != 0);
+        synchronized (lock) {
+            return (marks.size() != 0);
+        }
     }
 
     public void resetToStart() {
+        synchronized (lock) {
+            marks.clear();
+            next = 0;
+        }
+    }
 
+    public void demark() {
+        synchronized (lock) {
+            marks.remove(marks.size() - 1);
+        }
+    }
+
+    public void resetToFirst() {
+        synchronized (lock) {
+            next = marks.get(0);
+            marks.clear();
+        }
     }
 }

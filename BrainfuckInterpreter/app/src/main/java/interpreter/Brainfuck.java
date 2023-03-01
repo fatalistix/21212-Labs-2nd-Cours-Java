@@ -30,13 +30,13 @@ public class Brainfuck {
         } catch (FactoryObjectCreatingException e) {
             throw new BrainfuckDebugException("Error with command \"" + e.getMessage().charAt(0) + "\": debug failed", e);
         } catch (CommandDebugException e) {
-            throw new BrainfuckIncompleteCommandsInputException(e);
+            throw new BrainfuckIncompleteCommandsInputException(e.getMessage(), e);
         }
     }
 
     public String execute(String data) throws BrainfuckRuntimeException {
         context.setInputData(data);
-        context.resetInputCommands();
+        context.resetToStartCommand();
         int c;
         try {
             while ((c = context.readCommand()) != -1) {
