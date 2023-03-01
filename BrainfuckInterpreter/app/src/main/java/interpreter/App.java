@@ -32,6 +32,7 @@ public class App {
                     brainfuck.debug(input);
                 } catch (BrainfuckDebugException e) {
                     out.println("[DERR] > " + e.getMessage());
+                    continue;
                 } catch (BrainfuckIncompleteCommandsInputException e) {
                     // TODO Auto-generated catch block
                     out.println("[NOTH] > Now it do nothing, because never reachable");

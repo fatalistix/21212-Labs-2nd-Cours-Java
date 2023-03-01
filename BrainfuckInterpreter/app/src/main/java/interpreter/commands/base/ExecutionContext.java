@@ -5,6 +5,9 @@ import java.io.StringWriter;
 
 import interpreter.patterns.readers.StringReaderWithLoading;
 
+//? Add reset/restore functions to guarantee restoring to previous state 
+//? in case of runtime exception
+
 public class ExecutionContext {
     // Constants
     private final int POINTER_INIT_POS = 0;
@@ -22,6 +25,7 @@ public class ExecutionContext {
 
     private StringWriter output = new StringWriter();
 
+    // Constructors
     public ExecutionContext(int memorySize, int pointerInitPos) {
         this.memoryPointer = pointerInitPos;
         this.memory  = new char[memorySize];
@@ -30,6 +34,7 @@ public class ExecutionContext {
     public ExecutionContext() {
     }
 
+    // Methods
     public void resetInputCommands() {
         try {
             inputCommands.reset();

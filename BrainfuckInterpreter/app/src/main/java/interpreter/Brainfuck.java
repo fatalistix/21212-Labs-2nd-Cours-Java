@@ -22,8 +22,11 @@ public class Brainfuck {
 
     public void debug(String commands) throws BrainfuckDebugException, BrainfuckIncompleteCommandsInputException {
         context.setInputCommands(commands);
+        int c;
         try {
-            cManager.debug(context);
+            while ((c = context.readCommand()) != -1) {
+                cManager.debug(c, context);
+            }
         } catch (FactoryObjectCreatingException e) {
             throw new BrainfuckDebugException("Error with command \"" + e.getMessage().charAt(0) + "\": debug failed", e);
         } catch (CommandDebugException e) {
@@ -33,10 +36,14 @@ public class Brainfuck {
 
     public String execute(String data) throws BrainfuckRuntimeException {
         context.setInputData(data);
+        context.resetInputCommands();
+        int c;
         try {
-            cManager.execute(context);
+            while ((c = context.readCommand()) != -1) {
+                cManager.execute(c, context);
+            }
         } catch (CommandRuntimeException e) {
-            throw new BrainfuckRuntimeException(e);
+            throw new BrainfuckRuntimeException(e.getMessage(), e);
         }
         return context.getOutput();
     }

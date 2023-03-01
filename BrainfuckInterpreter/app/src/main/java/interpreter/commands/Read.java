@@ -15,7 +15,7 @@ public class Read implements Command {
         try {
             ec.readFromDataToCeil();
         } catch(IllegalArgumentException e) {
-            throw new CommandRuntimeException(e);
+            throw new CommandRuntimeException(e.getMessage(), e);
         }
     }
     
