@@ -18,5 +18,9 @@ public class Read implements Command {
             throw new CommandRuntimeException(e.getMessage(), e);
         }
     }
+
+    @Override
+    public void skip(ExecutionContext ec, CommandManager cm) {
+    }
     
 }

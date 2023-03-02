@@ -14,5 +14,9 @@ public class Print implements Command {
     public void run(ExecutionContext ec, CommandManager cm) throws CommandRuntimeException {
         ec.writeFromCeilToOutput();
     }
+
+    @Override
+    public void skip(ExecutionContext ec, CommandManager cm) {
+    }
     
 }

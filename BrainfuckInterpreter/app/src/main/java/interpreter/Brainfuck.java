@@ -40,7 +40,7 @@ public class Brainfuck {
         int c;
         try {
             while ((c = context.readCommand()) != -1) {
-                cManager.execute(c, context);
+                cManager.run(c, context);
             }
         } catch (CommandRuntimeException e) {
             throw new BrainfuckRuntimeException(e.getMessage(), e);
@@ -49,6 +49,10 @@ public class Brainfuck {
     }
     public void reset() {
         context.reset();
+    }
+
+    public int getValue() {
+        return context.readFromCeil();
     }
 
     public class BrainfuckCreatingException extends Exception {

@@ -68,6 +68,10 @@ public class ExecutionContext {
         inputCommands.demark();
     }
 
+    public void markCurrentCommand() {
+        inputCommands.markCurrentCommand();
+    }
+
     public void resetToStartCommand() {
         inputCommands.resetToStart();
     }

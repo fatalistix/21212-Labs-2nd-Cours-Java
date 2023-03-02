@@ -24,7 +24,12 @@ public class App {
                 if (input.equals("exit"))  { break; } 
                 if (input.equals(""))      { continue; }
                 if (input.equals("reset")) { 
+                    out.println("[INFO] > Reset");
                     brainfuck.reset();
+                    continue;
+                }
+                if (input.equals("value")) {
+                    out.println("[INFO] > " + brainfuck.getValue());
                     continue;
                 }
                 

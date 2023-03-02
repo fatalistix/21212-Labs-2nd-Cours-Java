@@ -5,6 +5,7 @@ import interpreter.patterns.factory.FactoryObjectCreatingException;
 public interface Command {
     public void debug(ExecutionContext ec, CommandManager cm) throws CommandDebugException, FactoryObjectCreatingException;
     public void run  (ExecutionContext ec, CommandManager cm) throws CommandRuntimeException;
+    public void skip (ExecutionContext ec, CommandManager cm);
 
     public class CommandDebugException extends Exception {
         public CommandDebugException() {

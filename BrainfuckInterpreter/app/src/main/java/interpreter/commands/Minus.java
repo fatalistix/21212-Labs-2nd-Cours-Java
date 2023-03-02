@@ -14,4 +14,8 @@ public class Minus implements Command {
         ec.decrementAtPointer();
     }
 
+    @Override
+    public void skip(ExecutionContext ec, CommandManager cm) {
+    }
+
 }

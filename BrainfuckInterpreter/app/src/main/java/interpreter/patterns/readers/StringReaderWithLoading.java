@@ -87,7 +87,7 @@ public class StringReaderWithLoading extends Reader {
         synchronized (lock) {
             ensureOpen();
             next = marks.get(marks.size() - 1);
-            demark(); //??????
+            // demark(); //??????
         }
     }
 
@@ -128,14 +128,28 @@ public class StringReaderWithLoading extends Reader {
 
     public void demark() {
         synchronized (lock) {
-            marks.remove(marks.size() - 1);
+            if (marks.size() != 0) {
+                marks.remove(marks.size() - 1);
+            }
         }
     }
 
     public void resetToFirst() {
         synchronized (lock) {
-            next = marks.get(0);
-            marks.clear();
+            if (marks.size() > 0) {
+                next = marks.get(0);
+                marks.clear();
+            } else {
+                next = 0;
+            }
+        }
+    }
+
+    public void markCurrentCommand() {
+        synchronized (lock) {
+            if (next != 0) {
+                marks.add(next - 1);
+            } 
         }
     }
 }

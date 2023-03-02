@@ -14,7 +14,11 @@ public class RightShift implements Command {
         try {
             ec.rightShift();
         } catch (IllegalArgumentException e) {
-            throw new CommandRuntimeException();
+            throw new CommandRuntimeException(e.getMessage(), e);
         }
+    }
+
+    @Override
+    public void skip(ExecutionContext ec, CommandManager cm) {
     }
 }

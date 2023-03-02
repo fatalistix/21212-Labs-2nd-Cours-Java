@@ -2,6 +2,7 @@ package interpreter.commands;
 
 import interpreter.commands.base.Command;
 import interpreter.commands.base.CommandManager;
+import interpreter.commands.base.ExecutionContext;
 
 public class LeftShift implements Command {
     @Override
@@ -13,7 +14,11 @@ public class LeftShift implements Command {
         try {
             ec.leftShift();
         } catch (IllegalArgumentException e) {
-            throw new CommandRuntimeException(e);
+            throw new CommandRuntimeException(e.getMessage(), e);
         }
+    }
+
+    @Override
+    public void skip(ExecutionContext ec, CommandManager cm) {
     }
 }

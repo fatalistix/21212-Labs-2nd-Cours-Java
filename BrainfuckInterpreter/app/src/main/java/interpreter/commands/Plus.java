@@ -14,4 +14,8 @@ public class Plus implements Command {
         ec.incrementAtPointer();
     }
 
+    @Override
+    public void skip(ExecutionContext ec, CommandManager cm) {
+    }
+
 }

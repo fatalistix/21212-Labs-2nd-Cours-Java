@@ -10,6 +10,12 @@ import interpreter.patterns.factory.FactoryCreatingFailureException;
 import interpreter.patterns.factory.FactoryObjectCreatingException;
 
 public class CommandManager {
+    private Map <Integer, Command> cachedCommands = new HashMap<>();
+
+    private Factory <Command> commandFactory;
+
+    private final String PATH = "Classes.cfg";
+
     public CommandManager() throws FactoryCreatingFailureException {
         commandFactory = new Factory<>(PATH);
     }
@@ -35,8 +41,7 @@ public class CommandManager {
         //     command.debug(context, this);
         // }
     }
-
-    public void execute(int commandCode, ExecutionContext context) throws CommandRuntimeException {
+    public void run(int commandCode, ExecutionContext context) throws CommandRuntimeException {
         Command command = cachedCommands.get(commandCode);
         command.run(context, this);
         // while ((c = context.readCommand()) != -1) {
@@ -45,7 +50,8 @@ public class CommandManager {
         // }
     }
 
-    private Map <Integer, Command> cachedCommands = new HashMap<>();
-    private Factory <Command> commandFactory;
-    private final String PATH = "Classes.cfg";
+    public void skip(int commandCode, ExecutionContext context) {
+        Command command = cachedCommands.get(commandCode);
+        command.skip(context, this);
+    }
 }
