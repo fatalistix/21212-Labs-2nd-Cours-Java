@@ -16,6 +16,7 @@ public class App {
     public static void main(String[] args) {
         Brainfuck brainfuck;
         String input;
+        boolean waiting = false;
         try (Scanner sc = new Scanner(in)) {
             brainfuck = new Brainfuck();
             while (true) {
@@ -34,16 +35,20 @@ public class App {
                 }
                 
                 try {
-                    brainfuck.debug(input);
+                    if (waiting) {
+                        brainfuck.load(input);
+                    } else {
+                        brainfuck.debug(input);
+                    }
                 } catch (BrainfuckDebugException e) {
                     out.println("[DERR] > " + e.getMessage());
                     continue;
                 } catch (BrainfuckIncompleteCommandsInputException e) {
-                    out.println("[DERR] > Incomplete statement: " + e.getMessage());
+                    // out.println("[DERR] > Incomplete statement: " + e.getMessage());
+                    waiting = true;
                     continue;
-                    // out.println("[NOTH] > Now it do nothing, because never reachable");
                 }
-                
+                waiting = false;
                 out.print("[Data] > ");
                 input = sc.nextLine();
                 try {

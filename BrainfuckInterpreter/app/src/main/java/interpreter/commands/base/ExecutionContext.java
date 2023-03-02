@@ -95,7 +95,7 @@ public class ExecutionContext {
 
     public void loadInputCommands(String s) {
         try {
-            inputData.toLoad(s);
+            inputCommands.toLoad(s);
         } catch (IOException e) {
             //? It should never throw it, but if it will we will catch it and do nothing
         }

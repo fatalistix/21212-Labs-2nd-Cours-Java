@@ -11,14 +11,14 @@ public class LoopStart implements Command {
     @Override
     public void debug(ExecutionContext ec, CommandManager cm) throws CommandDebugException, FactoryObjectCreatingException {
         int commandCode;
-        // ec.markCurrentCommand();
+        ec.markCurrentCommand();
         while ((commandCode = ec.readCommand()) != -1 && commandCode != ']') {
             cm.debug(commandCode, ec);
         }
         if (commandCode == -1) {
             throw new CommandDebugException("Got \"[\", but \"]\" not found");
         }
-        // ec.demarkCommand();
+        ec.demarkCommand();
     }
 
     @Override

@@ -20,6 +20,21 @@ public class Brainfuck {
         }
     }
 
+    public void load(String commands) throws BrainfuckDebugException, BrainfuckIncompleteCommandsInputException {
+        context.loadInputCommands(commands);
+        context.resetToFirstMarkedCommand();
+        int c;
+        try {
+            while ((c = context.readCommand()) != -1) {
+                cManager.debug(c, context);
+            }
+        } catch (FactoryObjectCreatingException e) {
+            throw new BrainfuckDebugException("Error with command \"" + e.getMessage().charAt(0) + "\": debug failed", e);
+        } catch (CommandDebugException e) {
+            throw new BrainfuckIncompleteCommandsInputException(e.getMessage(), e);
+        }
+    }
+
     public void debug(String commands) throws BrainfuckDebugException, BrainfuckIncompleteCommandsInputException {
         context.setInputCommands(commands);
         int c;
