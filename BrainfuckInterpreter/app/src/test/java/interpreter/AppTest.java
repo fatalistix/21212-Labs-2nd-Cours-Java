@@ -4,23 +4,54 @@
 package interpreter;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.*;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class AppTest {
-    static Brainfuck bf;
+    Brainfuck bf = null;
     
-    @BeforeAll
-    static void initBF() {
-        assertDoesNotThrow(() -> { bf = new Brainfuck(); });
+    // @BeforeAll
+    // static void initBF() {
+    //     assertDoesNotThrow(() -> { bf = new Brainfuck(); });
+    // }
+
+    @BeforeEach
+    void resetBF() {
+        bf = new Brainfuck();
+        assertNotNull(bf);
+        bf.reset();
     }
 
+    @Tag("Every Registered Command to Be Recognized")
     @ParameterizedTest
-    @ValueSource(chars = {'+', '-', ',', '.', '>', '<'})
-    @Tag("Every Registered Command to be Recognized")
-    void inputSingleCommand(char code) {
-        assertDoesNotThrow(() -> { bf.debug(String.valueOf(code)); });
+    @ValueSource(strings = {"+", "-", ",", ".", ">", "<", "[]"})
+    void inputSingleCommand(String code) {
+        assertDoesNotThrow(() -> { bf.debug(code); });
+    }
+
+
+
+
+    @Tag("Hard Program")
+    @Test
+    void factorial() {
+        assertDoesNotThrow( ()-> {
+            bf.debug("+++++[>+>>>+<<<<-]>--[[>+>+<<-]>>+<[<+>-]>[>[>>+>+<<<-]>>>[<<<+>>>-]<[<+>-]<<<-]>[-]>[<+>-]<<<<-]>>>.");
+            bf.execute("");
+        } );
+        assertEquals(120, bf.getValue());
+    }
+
+    @Tag("Hard Program")
+    @Test
+    void square() {
+        assertDoesNotThrow( ()-> {
+            bf.debug("++++++++++[>>+<<-]>>[-[>+<<<++>>-]<<+>>>[<+>-]<]<<.");
+            bf.execute("");
+        } );
+        assertEquals(100, bf.getValue());
     }
 }

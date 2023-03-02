@@ -32,6 +32,7 @@ public final class Factory <Abstract> {
                 cachedClasses.put(name, clazz);
             }
             //? All checks say that it will be casted correctly
+            @SuppressWarnings(""); //???????????????????????????????????????????????????
             return (Abstract) clazz.getDeclaredConstructor().newInstance();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException
         | InvocationTargetException | NoSuchMethodException | SecurityException e) {

@@ -85,6 +85,9 @@ public class ExecutionContext {
     }
 
     public void writeFromCeilToOutput() {
+        if (output == null) {
+            output = new StringWriter();
+        }
         output.write(memory[memoryPointer]);
     }
 
