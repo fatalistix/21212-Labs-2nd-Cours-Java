@@ -10,6 +10,8 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import interpreter.Brainfuck.BrainfuckCreatingException;
+
 class AppTest {
     Brainfuck bf = null;
     
@@ -19,7 +21,7 @@ class AppTest {
     // }
 
     @BeforeEach
-    void resetBF() {
+    void resetBF() throws BrainfuckCreatingException {
         bf = new Brainfuck();
         assertNotNull(bf);
         bf.reset();
