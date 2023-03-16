@@ -13,12 +13,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 import interpreter.Brainfuck.BrainfuckCreatingException;
 
 class AppTest {
-    Brainfuck bf = null;
+    static Brainfuck bf = null;
     
-    // @BeforeAll
-    // static void initBF() {
-    //     assertDoesNotThrow(() -> { bf = new Brainfuck(); });
-    // }
+     @BeforeAll
+     static void initBF() {
+         assertDoesNotThrow(() -> { bf = new Brainfuck(); });
+     }
 
     @BeforeEach
     void resetBF() throws BrainfuckCreatingException {
@@ -27,17 +27,12 @@ class AppTest {
         bf.reset();
     }
 
-    @Tag("Every Registered Command to Be Recognized")
     @ParameterizedTest
     @ValueSource(strings = {"+", "-", ",", ".", ">", "<", "[]"})
     void inputSingleCommand(String code) {
         assertDoesNotThrow(() -> { bf.debug(code); });
     }
 
-
-
-
-    @Tag("Hard Program")
     @Test
     void factorial() {
         assertDoesNotThrow( ()-> {
@@ -47,7 +42,6 @@ class AppTest {
         assertEquals(120, bf.getValue());
     }
 
-    @Tag("Hard Program")
     @Test
     void square() {
         assertDoesNotThrow( ()-> {

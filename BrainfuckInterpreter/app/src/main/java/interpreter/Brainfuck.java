@@ -7,7 +7,13 @@ import interpreter.commands.base.Command.CommandRuntimeException;
 import interpreter.patterns.factory.FactoryCreatingFailureException;
 import interpreter.patterns.factory.FactoryObjectCreatingException;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 public class Brainfuck {
+
+    private static Logger logger = LogManager.getLogger(Brainfuck.class);
+
     private CommandManager cManager;
 
     private ExecutionContext context = new ExecutionContext();
@@ -16,6 +22,7 @@ public class Brainfuck {
         try {
             cManager = new CommandManager();
         } catch (FactoryCreatingFailureException e) {
+            logger.error("Fatal error: cannot create factory");
             throw new BrainfuckCreatingException(e);
         }
     }
@@ -29,8 +36,10 @@ public class Brainfuck {
                 cManager.debug(c, context);
             }
         } catch (FactoryObjectCreatingException e) {
+            logger.warn("Command " + e.getMessage().charAt(0) + " wasn't found");
             throw new BrainfuckDebugException("Error with command \"" + e.getMessage().charAt(0) + "\": debug failed", e);
         } catch (CommandDebugException e) {
+            logger.warn("Failed debugging command " + e.getMessage().charAt(0));
             throw new BrainfuckIncompleteCommandsInputException(e.getMessage(), e);
         }
     }
@@ -43,8 +52,10 @@ public class Brainfuck {
                 cManager.debug(c, context);
             }
         } catch (FactoryObjectCreatingException e) {
+            logger.warn("Command " + e.getMessage().charAt(0) + " wasn't found");
             throw new BrainfuckDebugException("Error with command \"" + e.getMessage().charAt(0) + "\": debug failed", e);
         } catch (CommandDebugException e) {
+            logger.warn("Failed debugging command " + e.getMessage().charAt(0));
             throw new BrainfuckIncompleteCommandsInputException(e.getMessage(), e);
         }
     }
@@ -58,6 +69,7 @@ public class Brainfuck {
                 cManager.run(c, context);
             }
         } catch (CommandRuntimeException e) {
+            logger.warn(e.getMessage());
             throw new BrainfuckRuntimeException(e.getMessage(), e);
         }
         return context.getOutput();
