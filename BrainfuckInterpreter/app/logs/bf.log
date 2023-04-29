@@ -1,347 +1,100 @@
-2023-03-16 10:56:44.993 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:56:45.000 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 43not found
-2023-03-16 10:56:45.000 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:56:45.000 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:56:45.001 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key +
-2023-03-16 10:56:45.001 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:56:45.001 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:56:45.002 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 91not found
-2023-03-16 10:56:45.002 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:56:45.002 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:56:45.003 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key [
-2023-03-16 10:56:45.003 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:56:45.003 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:56:45.003 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 62not found
-2023-03-16 10:56:45.003 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:56:45.004 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:56:45.004 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key >
-2023-03-16 10:56:45.004 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:56:45.004 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:56:45.005 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 60not found
-2023-03-16 10:56:45.005 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:56:45.005 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:56:45.005 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key <
-2023-03-16 10:56:45.005 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:56:45.006 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:56:45.006 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 45not found
-2023-03-16 10:56:45.006 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:56:45.006 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:56:45.007 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key -
-2023-03-16 10:56:45.007 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:56:45.007 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:56:45.007 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 46not found
-2023-03-16 10:56:45.007 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:56:45.008 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:56:45.008 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key .
-2023-03-16 10:56:45.008 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:56:45.008 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:56:45.019 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:56:45.021 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 43not found
-2023-03-16 10:56:45.021 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:56:45.021 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:56:45.021 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key +
-2023-03-16 10:56:45.021 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:56:45.021 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:56:45.022 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 91not found
-2023-03-16 10:56:45.022 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:56:45.022 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:56:45.022 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key [
-2023-03-16 10:56:45.022 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:56:45.022 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:56:45.022 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 62not found
-2023-03-16 10:56:45.023 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:56:45.023 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:56:45.023 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key >
-2023-03-16 10:56:45.023 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:56:45.023 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:56:45.023 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 60not found
-2023-03-16 10:56:45.023 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:56:45.024 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:56:45.024 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key <
-2023-03-16 10:56:45.024 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:56:45.024 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:56:45.024 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 45not found
-2023-03-16 10:56:45.024 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:56:45.025 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:56:45.025 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key -
-2023-03-16 10:56:45.025 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:56:45.025 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:56:45.025 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 46not found
-2023-03-16 10:56:45.025 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:56:45.026 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:56:45.026 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key .
-2023-03-16 10:56:45.026 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:56:45.026 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:56:45.047 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:56:45.060 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 43not found
-2023-03-16 10:56:45.060 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:56:45.061 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:56:45.061 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key +
-2023-03-16 10:56:45.061 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:56:45.061 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:56:45.067 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:56:45.068 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 45not found
-2023-03-16 10:56:45.068 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:56:45.068 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:56:45.068 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key -
-2023-03-16 10:56:45.069 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:56:45.069 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:56:45.074 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:56:45.075 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 44not found
-2023-03-16 10:56:45.076 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:56:45.076 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:56:45.076 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key ,
-2023-03-16 10:56:45.076 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:56:45.076 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:56:45.080 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:56:45.081 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 46not found
-2023-03-16 10:56:45.081 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:56:45.081 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:56:45.081 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key .
-2023-03-16 10:56:45.081 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:56:45.081 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:56:45.086 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:56:45.087 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 62not found
-2023-03-16 10:56:45.087 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:56:45.087 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:56:45.087 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key >
-2023-03-16 10:56:45.088 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:56:45.088 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:56:45.092 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:56:45.093 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 60not found
-2023-03-16 10:56:45.093 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:56:45.093 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:56:45.093 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key <
-2023-03-16 10:56:45.093 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:56:45.093 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:56:45.097 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:56:45.098 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 91not found
-2023-03-16 10:56:45.099 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:56:45.099 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:56:45.099 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key [
-2023-03-16 10:56:45.099 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:56:45.099 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:57:23.339 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:57:23.354 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:57:23.357 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 43not found
-2023-03-16 10:57:23.357 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:57:23.358 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:57:23.358 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key +
-2023-03-16 10:57:23.358 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:57:23.359 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:57:23.359 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 91not found
-2023-03-16 10:57:23.359 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:57:23.359 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:57:23.360 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key [
-2023-03-16 10:57:23.360 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:57:23.360 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:57:23.360 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 62not found
-2023-03-16 10:57:23.361 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:57:23.361 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:57:23.361 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key >
-2023-03-16 10:57:23.362 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:57:23.362 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:57:23.362 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 60not found
-2023-03-16 10:57:23.362 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:57:23.362 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:57:23.363 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key <
-2023-03-16 10:57:23.363 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:57:23.363 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:57:23.363 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 45not found
-2023-03-16 10:57:23.363 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:57:23.363 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:57:23.364 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key -
-2023-03-16 10:57:23.364 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:57:23.364 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:57:23.364 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 46not found
-2023-03-16 10:57:23.365 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:57:23.365 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:57:23.365 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key .
-2023-03-16 10:57:23.365 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:57:23.365 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:57:23.376 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:57:23.377 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 43not found
-2023-03-16 10:57:23.377 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:57:23.377 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:57:23.377 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key +
-2023-03-16 10:57:23.377 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:57:23.378 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:57:23.378 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 91not found
-2023-03-16 10:57:23.378 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:57:23.378 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:57:23.378 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key [
-2023-03-16 10:57:23.378 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:57:23.378 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:57:23.378 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 62not found
-2023-03-16 10:57:23.378 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:57:23.378 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:57:23.378 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key >
-2023-03-16 10:57:23.379 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:57:23.379 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:57:23.379 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 60not found
-2023-03-16 10:57:23.379 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:57:23.379 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:57:23.379 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key <
-2023-03-16 10:57:23.379 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:57:23.379 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:57:23.379 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 45not found
-2023-03-16 10:57:23.380 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:57:23.380 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:57:23.380 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key -
-2023-03-16 10:57:23.380 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:57:23.380 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:57:23.380 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 46not found
-2023-03-16 10:57:23.380 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:57:23.380 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:57:23.380 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key .
-2023-03-16 10:57:23.380 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:57:23.381 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:57:23.402 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:57:23.414 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 43not found
-2023-03-16 10:57:23.414 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:57:23.414 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:57:23.414 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key +
-2023-03-16 10:57:23.415 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:57:23.415 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:57:23.422 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:57:23.423 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 45not found
-2023-03-16 10:57:23.423 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:57:23.423 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:57:23.423 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key -
-2023-03-16 10:57:23.423 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:57:23.424 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:57:23.428 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:57:23.429 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 44not found
-2023-03-16 10:57:23.429 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:57:23.429 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:57:23.429 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key ,
-2023-03-16 10:57:23.430 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:57:23.430 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:57:23.434 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:57:23.435 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 46not found
-2023-03-16 10:57:23.435 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:57:23.435 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:57:23.435 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key .
-2023-03-16 10:57:23.435 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:57:23.436 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:57:23.439 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:57:23.440 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 62not found
-2023-03-16 10:57:23.440 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:57:23.440 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:57:23.440 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key >
-2023-03-16 10:57:23.441 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:57:23.441 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:57:23.445 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:57:23.446 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 60not found
-2023-03-16 10:57:23.446 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:57:23.446 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:57:23.446 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key <
-2023-03-16 10:57:23.447 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:57:23.447 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:57:23.452 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:57:23.452 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 91not found
-2023-03-16 10:57:23.453 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:57:23.453 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:57:23.453 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key [
-2023-03-16 10:57:23.453 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:57:23.453 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:58:49.332 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:58:49.365 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:58:49.379 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 43not found
-2023-03-16 10:58:49.380 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:58:49.380 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:58:49.380 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key +
-2023-03-16 10:58:49.380 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:58:49.381 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:58:49.392 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:58:49.393 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 45not found
-2023-03-16 10:58:49.393 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:58:49.393 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:58:49.394 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key -
-2023-03-16 10:58:49.394 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:58:49.394 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:58:49.400 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:58:49.401 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 44not found
-2023-03-16 10:58:49.401 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:58:49.401 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:58:49.401 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key ,
-2023-03-16 10:58:49.401 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:58:49.402 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:58:49.406 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:58:49.407 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 46not found
-2023-03-16 10:58:49.407 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:58:49.407 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:58:49.407 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key .
-2023-03-16 10:58:49.408 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:58:49.408 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:58:49.413 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:58:49.413 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 62not found
-2023-03-16 10:58:49.413 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:58:49.414 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:58:49.414 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key >
-2023-03-16 10:58:49.414 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:58:49.414 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:58:49.419 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:58:49.420 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 60not found
-2023-03-16 10:58:49.420 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:58:49.421 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:58:49.421 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key <
-2023-03-16 10:58:49.421 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:58:49.421 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:58:49.425 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:58:49.426 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 91not found
-2023-03-16 10:58:49.426 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:58:49.426 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:58:49.426 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key [
-2023-03-16 10:58:49.427 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:58:49.427 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:59:57.618 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:59:57.651 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:59:57.666 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 43not found
-2023-03-16 10:59:57.666 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:59:57.666 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:59:57.667 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key +
-2023-03-16 10:59:57.667 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:59:57.668 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:59:57.679 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:59:57.680 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 45not found
-2023-03-16 10:59:57.680 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:59:57.680 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:59:57.681 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key -
-2023-03-16 10:59:57.681 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:59:57.681 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:59:57.685 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:59:57.686 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 44not found
-2023-03-16 10:59:57.686 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:59:57.686 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:59:57.686 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key ,
-2023-03-16 10:59:57.686 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:59:57.687 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:59:57.690 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:59:57.691 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 46not found
-2023-03-16 10:59:57.691 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:59:57.691 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:59:57.691 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key .
-2023-03-16 10:59:57.691 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:59:57.692 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:59:57.695 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:59:57.695 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 62not found
-2023-03-16 10:59:57.696 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:59:57.696 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:59:57.696 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key >
-2023-03-16 10:59:57.696 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:59:57.696 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:59:57.699 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:59:57.700 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 60not found
-2023-03-16 10:59:57.700 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:59:57.700 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:59:57.700 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key <
-2023-03-16 10:59:57.700 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:59:57.701 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
-2023-03-16 10:59:57.703 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
-2023-03-16 10:59:57.704 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 91not found
-2023-03-16 10:59:57.704 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
-2023-03-16 10:59:57.704 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
-2023-03-16 10:59:57.704 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key [
-2023-03-16 10:59:57.705 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
-2023-03-16 10:59:57.705 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
+2023-03-28 19:35:31.841 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
+2023-03-28 19:35:31.889 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
+2023-03-28 19:35:31.915 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 43not found
+2023-03-28 19:35:31.915 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
+2023-03-28 19:35:31.916 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
+2023-03-28 19:35:31.917 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key +
+2023-03-28 19:35:31.917 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
+2023-03-28 19:35:31.918 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
+2023-03-28 19:35:31.934 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
+2023-03-28 19:35:31.935 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 45not found
+2023-03-28 19:35:31.935 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
+2023-03-28 19:35:31.936 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
+2023-03-28 19:35:31.936 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key -
+2023-03-28 19:35:31.937 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
+2023-03-28 19:35:31.937 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
+2023-03-28 19:35:31.943 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
+2023-03-28 19:35:31.944 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 44not found
+2023-03-28 19:35:31.945 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
+2023-03-28 19:35:31.945 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
+2023-03-28 19:35:31.945 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key ,
+2023-03-28 19:35:31.946 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
+2023-03-28 19:35:31.946 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
+2023-03-28 19:35:31.951 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
+2023-03-28 19:35:31.953 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 46not found
+2023-03-28 19:35:31.953 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
+2023-03-28 19:35:31.954 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
+2023-03-28 19:35:31.954 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key .
+2023-03-28 19:35:31.955 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
+2023-03-28 19:35:31.955 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
+2023-03-28 19:35:31.961 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
+2023-03-28 19:35:31.962 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 62not found
+2023-03-28 19:35:31.962 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
+2023-03-28 19:35:31.963 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
+2023-03-28 19:35:31.963 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key >
+2023-03-28 19:35:31.963 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
+2023-03-28 19:35:31.964 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
+2023-03-28 19:35:31.968 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
+2023-03-28 19:35:31.969 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 60not found
+2023-03-28 19:35:31.969 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
+2023-03-28 19:35:31.970 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
+2023-03-28 19:35:31.970 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key <
+2023-03-28 19:35:31.971 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
+2023-03-28 19:35:31.971 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
+2023-03-28 19:35:31.976 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
+2023-03-28 19:35:31.977 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 91not found
+2023-03-28 19:35:31.978 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
+2023-03-28 19:35:31.978 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
+2023-03-28 19:35:31.978 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key [
+2023-03-28 19:35:31.978 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
+2023-03-28 19:35:31.979 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
+2023-03-28 19:35:47.304 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
+2023-03-28 19:35:47.348 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
+2023-03-28 19:35:47.376 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 43not found
+2023-03-28 19:35:47.377 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
+2023-03-28 19:35:47.377 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
+2023-03-28 19:35:47.378 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key +
+2023-03-28 19:35:47.378 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
+2023-03-28 19:35:47.379 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
+2023-03-28 19:35:47.393 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
+2023-03-28 19:35:47.394 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 45not found
+2023-03-28 19:35:47.395 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
+2023-03-28 19:35:47.395 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
+2023-03-28 19:35:47.395 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key -
+2023-03-28 19:35:47.395 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
+2023-03-28 19:35:47.396 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
+2023-03-28 19:35:47.400 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
+2023-03-28 19:35:47.401 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 44not found
+2023-03-28 19:35:47.401 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
+2023-03-28 19:35:47.402 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
+2023-03-28 19:35:47.402 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key ,
+2023-03-28 19:35:47.402 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
+2023-03-28 19:35:47.402 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
+2023-03-28 19:35:47.406 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
+2023-03-28 19:35:47.407 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 46not found
+2023-03-28 19:35:47.408 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
+2023-03-28 19:35:47.408 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
+2023-03-28 19:35:47.408 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key .
+2023-03-28 19:35:47.408 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
+2023-03-28 19:35:47.409 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
+2023-03-28 19:35:47.412 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
+2023-03-28 19:35:47.413 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 62not found
+2023-03-28 19:35:47.414 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
+2023-03-28 19:35:47.414 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
+2023-03-28 19:35:47.414 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key >
+2023-03-28 19:35:47.415 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
+2023-03-28 19:35:47.415 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
+2023-03-28 19:35:47.419 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
+2023-03-28 19:35:47.419 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 60not found
+2023-03-28 19:35:47.420 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
+2023-03-28 19:35:47.420 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
+2023-03-28 19:35:47.420 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key <
+2023-03-28 19:35:47.421 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
+2023-03-28 19:35:47.421 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
+2023-03-28 19:35:47.424 INFO from [interpreter.patterns.factory.Factory.<init>(Factory.java:23)] in [Test worker] - Config file loaded with success
+2023-03-28 19:35:47.426 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:35)] in [Test worker] - Command with code 91not found
+2023-03-28 19:35:47.426 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:32)] in [Test worker] - Searching for cached class...
+2023-03-28 19:35:47.426 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:35)] in [Test worker] - Cached class not found, trying to create new
+2023-03-28 19:35:47.426 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:42)] in [Test worker] - Loaded class with key [
+2023-03-28 19:35:47.427 INFO from [interpreter.patterns.factory.Factory.createObject(Factory.java:44)] in [Test worker] - Class cached
+2023-03-28 19:35:47.427 INFO from [interpreter.commands.base.CommandManager.debug(CommandManager.java:37)] in [Test worker] - Command created successfully
