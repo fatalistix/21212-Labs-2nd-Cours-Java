@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--JAVA FX IMPORTS-->
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+
+<GridPane fx:id="mainGridPane"
+          gridLinesVisible="true"
+          style="-fx-background-color: #AAFFAA;"
+          xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="ru.nsu.balashov.mousetrapgame.controllers.MainController">
+    <columnConstraints>
+        <ColumnConstraints halignment="CENTER" percentWidth="100" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints percentHeight="20" />
+        <RowConstraints percentHeight="10" />
+        <RowConstraints percentHeight="5" />
+        <RowConstraints percentHeight="60" />
+        <RowConstraints percentHeight="5" />
+    </rowConstraints>
+    <children>
+        <ImageView fx:id="mouseImageView"
+                   nodeOrientation="INHERIT"
+                   pickOnBounds="true"
+                   preserveRatio="true" />
+        <Label text="MOUSE TRAP"
+               GridPane.rowIndex="1">
+            <font>
+                <Font name="SF Pro Display Regular" size="13.0" />
+            </font>
+        </Label>
+        <Label text="Label" GridPane.rowIndex="2" />
+        <ListView fx:id="levelsListView" onMouseClicked="#selectLevel" GridPane.rowIndex="3" />
+        <AnchorPane GridPane.rowIndex="4">
+            <Button mnemonicParsing="false" text="Button" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" GridPane.rowIndex="4" />
+        </AnchorPane>
+    </children>
+</GridPane>
+
+

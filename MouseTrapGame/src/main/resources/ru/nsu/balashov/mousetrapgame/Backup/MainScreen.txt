@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--JAVA FX IMPORTS-->
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="mainAnchorPane" pickOnBounds="false" style="-fx-background-color: #FFAAAA;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nsu.balashov.mousetrapgame.controllers.MainController">
+   <VBox alignment="TOP_CENTER" spacing="10.0" AnchorPane.bottomAnchor="8" AnchorPane.leftAnchor="8" AnchorPane.rightAnchor="8" AnchorPane.topAnchor="8">
+      <children>
+         <ImageView fx:id="mouseMainImageView" fitHeight="180.0" fitWidth="362.0" pickOnBounds="true" preserveRatio="true" />
+         <Label text="MOUSE TRAP">
+            <font>
+               <Font name="SF Pro Display Bold" size="48.0" />
+            </font>
+         </Label>
+         <Label text="Choose level and help your mouse to pass through bread">
+            <font>
+               <Font name="SF Pro Display Regular Italic" size="18.0" />
+            </font>
+         </Label>
+         <ListView fx:id="levelsListView" onMouseClicked="#selectLevel" prefHeight="200.0" prefWidth="200.0" />
+         <Button fx:id="startButton" disable="true" mnemonicParsing="false" onMouseClicked="#startGame" pickOnBounds="false" prefWidth="285.0" text="START">
+            <font>
+               <Font name="SF Pro Display Regular" size="24.0" />
+            </font>
+         </Button>
+
+      </children>
+      <opaqueInsets>
+         <Insets />
+      </opaqueInsets>
+   </VBox>
+</AnchorPane>
