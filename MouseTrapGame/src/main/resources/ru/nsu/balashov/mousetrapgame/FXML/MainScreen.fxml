@@ -5,8 +5,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
+
+<?import javafx.geometry.Insets?>
 
 <GridPane fx:id="mainGridPane"
           gridLinesVisible="true"
@@ -14,32 +15,47 @@
           xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="ru.nsu.balashov.mousetrapgame.controllers.MainController">
     <columnConstraints>
-        <ColumnConstraints halignment="CENTER" percentWidth="100" />
+        <ColumnConstraints halignment="CENTER" percentWidth="100"/>
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints percentHeight="20" />
-        <RowConstraints percentHeight="10" />
-        <RowConstraints percentHeight="5" />
-        <RowConstraints percentHeight="60" />
-        <RowConstraints percentHeight="5" />
+        <RowConstraints percentHeight="20"/>
+        <RowConstraints percentHeight="10"/>
+        <RowConstraints percentHeight="10"/>
+        <RowConstraints percentHeight="50"/>
+        <RowConstraints percentHeight="10"/>
     </rowConstraints>
-    <children>
-        <ImageView fx:id="mouseImageView"
-                   nodeOrientation="INHERIT"
-                   pickOnBounds="true"
-                   preserveRatio="true" />
-        <Label text="MOUSE TRAP"
-               GridPane.rowIndex="1">
-            <font>
-                <Font name="SF Pro Display Regular" size="13.0" />
-            </font>
-        </Label>
-        <Label text="Label" GridPane.rowIndex="2" />
-        <ListView fx:id="levelsListView" onMouseClicked="#selectLevel" GridPane.rowIndex="3" />
-        <AnchorPane GridPane.rowIndex="4">
-            <Button mnemonicParsing="false" text="Button" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" GridPane.rowIndex="4" />
-        </AnchorPane>
-    </children>
+    <ImageView fx:id="mouseImageView"
+               nodeOrientation="INHERIT"
+               pickOnBounds="true"
+               preserveRatio="true"/>
+    <Label fx:id="titleLabel" text="MOUSE TRAP"
+           GridPane.rowIndex="1">
+    </Label>
+    <Label fx:id="descriptionLabel"
+           text="Choose level and help your mouse to pass through bread"
+           GridPane.rowIndex="2"/>
+    <ListView fx:id="levelsListView"
+              GridPane.fillWidth="false"
+              onMouseClicked="#selectLevel"
+              GridPane.rowIndex="3"
+              stylesheets="@Stylesheets/MainScreen.css">
+        <padding>
+            <Insets bottom="7" top="7" left="8" right="8"/>
+        </padding>
+    </ListView>
+    <AnchorPane fx:id="buttonAnchorPane"
+                onMouseClicked="#selectLevel"
+                GridPane.rowIndex="4"
+                GridPane.fillWidth="false">
+        <Button fx:id="startButton"
+                disable="true"
+                mnemonicParsing="false"
+                text="START"
+                onMouseClicked="#startGame"
+                AnchorPane.bottomAnchor="8.0" AnchorPane.topAnchor="8.0"
+                AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0"
+                GridPane.rowIndex="4"/>
+    </AnchorPane>
 </GridPane>
 
 

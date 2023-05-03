@@ -7,13 +7,13 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 public class GameModel {
-    public record FieldObjectBaseData(int x, int y, String id) {}
+    public record FieldObjectBaseData(int x, int y, int height, int width, String id) {}
     private final int[][] field = new int[6][6];
     private String levelName;
     private int piecesPlaced = 0;
     private boolean mousePlaced = false;
     private int mouseID;
-    private ArrayList<FieldObject> placedObjects = new ArrayList<>();
+    private final ArrayList<FieldObject> placedObjects = new ArrayList<>();
 
     private int selectedForDraggingId = -2;
     private int selectedForDraggingX;
@@ -22,6 +22,8 @@ public class GameModel {
     public String getLevelName() {
         return levelName;
     }
+
+
 
     public void printField() {
         for (int i = 0; i < 6; ++i) {
@@ -92,7 +94,7 @@ public class GameModel {
                 }
                 place(fo);
                 placedObjects.add(fo);
-                currentFieldObjects.add(new FieldObjectBaseData(fo.getX(), fo.getY(), fo.getGraphicsID()));
+                currentFieldObjects.add(new FieldObjectBaseData(fo.getX(), fo.getY(), fo.getSizeY(), fo.getSizeX(), fo.getGraphicsID()));
             }
             return currentFieldObjects;
         } catch (FileNotFoundException e) {
@@ -109,7 +111,6 @@ public class GameModel {
             selectedForDraggingId = field[y][x];
             selectedForDraggingX = x;
             selectedForDraggingY = y;
-            System.out.println(selectedForDraggingId);
         }
     }
 

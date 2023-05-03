@@ -32,11 +32,10 @@ public class Application extends javafx.application.Application {
 
         stage.setScene(scene);
         stage.setTitle("Mouse Trap");
-        stage.setMinWidth(Settings.GameWindowProperties.GAME_WIDTH);
-        stage.setMinHeight(Settings.GameWindowProperties.GAME_HEIGHT);
-        stage.setHeight(Settings.GameWindowProperties.GAME_HEIGHT);
-        stage.setWidth(Settings.GameWindowProperties.GAME_WIDTH);
-
+        stage.setMinWidth(Settings.WindowProperties.GAME_WIDTH);
+        stage.setMinHeight(Settings.WindowProperties.GAME_HEIGHT);
+        stage.setHeight(Settings.WindowProperties.GAME_HEIGHT);
+        stage.setWidth(Settings.WindowProperties.GAME_WIDTH);
 
         stage.show();
     }
