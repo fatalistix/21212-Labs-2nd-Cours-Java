@@ -74,6 +74,7 @@ public class MainController implements SwitchingController {
 
     @Override
     public void initController() {
+        levelsListViewItems.clear();
         ArrayList<String> levelsNames = LevelsData.getInstance().getLevelsNames();
 
         for (String s : levelsNames) {

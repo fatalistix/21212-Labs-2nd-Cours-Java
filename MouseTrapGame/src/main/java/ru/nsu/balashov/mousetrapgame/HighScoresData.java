@@ -37,7 +37,7 @@ public class HighScoresData {
 
 
     public static class HighScoresFactory {
-        public static record ScoreData(Integer seconds, String author) implements Comparable<ScoreData> {
+        public static record ScoreData(Integer seconds, String author, Integer steps) implements Comparable<ScoreData> {
             @Override
             public int compareTo(ScoreData o) {
                 return this.seconds - o.seconds;
@@ -75,11 +75,11 @@ public class HighScoresData {
             }
         }
 
-        public void saveScore(String levelName, String scoreAuthor, int seconds) {
+        public void saveScore(String levelName, String scoreAuthor, int seconds, int steps) {
             if (!scores.containsKey(levelName)) {
                 scores.put(levelName, new TreeBag<>());
             }
-            scores.get(levelName).add(new ScoreData(seconds, scoreAuthor));
+            scores.get(levelName).add(new ScoreData(seconds, scoreAuthor, steps));
         }
 
         public boolean storeScores() {
@@ -91,6 +91,7 @@ public class HighScoresData {
                         JsonObject jo = new JsonObject();
                         jo.addProperty("seconds", sd.seconds);
                         jo.addProperty("author", sd.author);
+                        jo.addProperty("steps", sd.steps);
                         levelScoresJa.add(jo);
                     }
 
@@ -122,6 +123,11 @@ public class HighScoresData {
                 return new ArrayList<>(scores.get(levelName));
             }
             return null;
+        }
+
+        public void clearScores() {
+            scores.clear();
+            storeScores();
         }
     }
 }

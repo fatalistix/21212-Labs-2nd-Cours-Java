@@ -26,8 +26,8 @@
              GridPane.rowIndex="0" GridPane.columnIndex="0">
         <MenuButton fx:id="toolbarGameMenuButton" text="Game">
             <items>
-                <MenuItem fx:id="scoresMenuItem" text="Scores"/>
-                <MenuItem fx:id="resetMenuItem" text="Reset the Game"/>
+                <MenuItem fx:id="scoresMenuItem" text="Scores" onAction="#showScores"/>
+                <MenuItem fx:id="resetMenuItem" text="Reset the Game" onAction="#resetGame"/>
                 <MenuItem fx:id="exitMenuItem" text="Exit"/>
             </items>
         </MenuButton>

@@ -1,14 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.GridPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="ru.nsu.balashov.mousetrapgame.controllers.BadLevelController"
-            prefHeight="400.0" prefWidth="600.0">
 
-</AnchorPane>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<GridPane xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="ru.nsu.balashov.mousetrapgame.controllers.BadLevelController">
+    <rowConstraints>
+        <RowConstraints percentHeight="40"/>
+        <RowConstraints percentHeight="40"/>
+        <RowConstraints percentHeight="20"/>
+    </rowConstraints>
+    <columnConstraints>
+        <ColumnConstraints percentWidth="100"/>
+    </columnConstraints>
+
+    <Label fx:id="badLevelLabel" text="Sorry!"
+           GridPane.rowSpan="1" GridPane.columnSpan="1"
+           GridPane.rowIndex="0" GridPane.columnIndex="0"
+           GridPane.halignment="CENTER" GridPane.valignment="BOTTOM"/>
+    <Label fx:id="descriptionLabel" text="Cannot load level because it have incorrect properties"
+           GridPane.rowSpan="1" GridPane.columnSpan="1"
+           GridPane.rowIndex="1" GridPane.columnIndex="0"
+           GridPane.halignment="CENTER" GridPane.valignment="TOP"/>
+    <Button fx:id="mainMenuButton" text="Main menu"
+            GridPane.rowSpan="1" GridPane.columnSpan="1"
+            GridPane.rowIndex="2" GridPane.columnIndex="0"
+            GridPane.halignment="CENTER" GridPane.valignment="CENTER"
+            onAction="#toMainMenu"/>
+</GridPane>

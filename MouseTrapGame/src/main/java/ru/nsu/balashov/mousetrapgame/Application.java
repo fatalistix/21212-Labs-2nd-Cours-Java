@@ -16,6 +16,7 @@ public class Application extends javafx.application.Application {
             switcher.loadScreen(GUIProperties.mainID, GUIProperties.mainFXML);
             switcher.loadScreen(GUIProperties.endgameID, GUIProperties.endgameFXML);
             switcher.loadScreen(GUIProperties.badLevelID, GUIProperties.badLevelFXML);
+            switcher.loadScreen(GUIProperties.scoresID, GUIProperties.scoresFXML);
         } catch (ScreenSwitcher.LoadScreensException e) {
             System.out.println(e.getMessage());
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);

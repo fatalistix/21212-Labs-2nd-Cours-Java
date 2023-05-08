@@ -18,6 +18,7 @@ public class GameModel {
     private int selectedForDraggingId = -2;
     private int selectedForDraggingX;
     private int selectedForDraggingY;
+    private boolean objectMoved = false;
 
     public String getLevelName() {
         return levelName;
@@ -234,7 +235,8 @@ public class GameModel {
 
 
 
-    public void move(int x, int y) {
+    public boolean move(int x, int y) {
+        objectMoved = false;
         if (x > selectedForDraggingX) {
             for (int i = 0; i < x - selectedForDraggingX; ++i) {
                 if (!canSelectedBeMovedRight()) {
@@ -242,6 +244,7 @@ public class GameModel {
                 }
                 moveSelectedRight();
                 ++selectedForDraggingX;
+                objectMoved = true;
             }
         } else {
             for (int i = 0; i < selectedForDraggingX - x; ++i) {
@@ -250,6 +253,7 @@ public class GameModel {
                 }
                 moveSelectedLeft();
                 --selectedForDraggingX;
+                objectMoved = true;
             }
         }
         if (y > selectedForDraggingY) {
@@ -259,6 +263,7 @@ public class GameModel {
                 }
                 moveSelectedDown();
                 ++selectedForDraggingY;
+                objectMoved = true;
             }
         } else {
             for (int i = 0; i < selectedForDraggingY - y; ++i) {
@@ -267,8 +272,14 @@ public class GameModel {
                 }
                 moveSelectedUp();
                 --selectedForDraggingY;
+                objectMoved = true;
             }
         }
+        return objectMoved;
+    }
+
+    public boolean isObjectMoved() {
+        return objectMoved;
     }
 
     public int getSelectedX() {

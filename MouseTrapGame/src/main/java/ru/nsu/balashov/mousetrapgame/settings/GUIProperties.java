@@ -10,11 +10,13 @@ public class GUIProperties {
     public static final String gameID = "game";
     public static final String endgameID = "endgame";
     public static final String badLevelID = "badLevel";
+    public static final String scoresID = "scores";
 
     public static final FXMLLoader mainFXML = new FXMLLoader(Objects.requireNonNull(ClassLoader.getSystemResource(pathToFXMLDir + "/MainScreen.fxml")));
     public static final FXMLLoader gameFXML = new FXMLLoader(Objects.requireNonNull(ClassLoader.getSystemResource(pathToFXMLDir + "/GameScreen.fxml")));
     public static final FXMLLoader endgameFXML = new FXMLLoader(Objects.requireNonNull(ClassLoader.getSystemResource(pathToFXMLDir + "/EndGameScreen.fxml")));
-    public static final FXMLLoader badLevelFXML = new FXMLLoader(Objects.requireNonNull(ClassLoader.getSystemResource(pathToFXMLDir + "/EndGameScreen.fxml")));
+    public static final FXMLLoader badLevelFXML = new FXMLLoader(Objects.requireNonNull(ClassLoader.getSystemResource(pathToFXMLDir + "/BadLevelScreen.fxml")));
+    public static final FXMLLoader scoresFXML = new FXMLLoader(Objects.requireNonNull(ClassLoader.getSystemResource(pathToFXMLDir + "/ScoresScreen.fxml")));
 
     private GUIProperties() {}
 }

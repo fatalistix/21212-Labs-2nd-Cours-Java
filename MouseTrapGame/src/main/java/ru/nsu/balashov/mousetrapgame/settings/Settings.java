@@ -47,6 +47,7 @@ public class Settings {
         private final static double GAME_FIELD_WIDTH_SCALE = 545. / 1920.;
         private final static double PIXEL_FOR_SHIFT_SCALE = 1. / 3.;
 
+
         public final static double PIXELS_PER_BLOCK = 90 * IMAGES_SCALE;
         public final static double PIXELS_FOR_SHIFT = PIXEL_FOR_SHIFT_SCALE * PIXELS_PER_BLOCK;
         public final static double LEVEL_NAME_FONT_SIZE = MainMenuScreenProperties.TITLE_FONT_SIZE;
@@ -55,10 +56,45 @@ public class Settings {
         public final static double BEST_SCORE_FONT_SIZE = MainMenuScreenProperties.DESCRIPTION_FONT_SIZE;
         public final static double GAME_FIELD_SIZE = GAME_FIELD_WIDTH_SCALE * DeviceScreenProperties.SCREEN_WIDTH;
         public final static double LINE_STROKE_WIDTH = 1. / 1920. * DeviceScreenProperties.SCREEN_WIDTH;
+        public static class SaveNamePopUp {
+            private final static double STAGE_WIDTH_SCALE = 400. / 1920.;
+            private final static double STAGE_HEIGHT_SCALE = 300. / 1080.;
+
+            public final static double STAGE_WIDTH = STAGE_WIDTH_SCALE * DeviceScreenProperties.SCREEN_WIDTH;
+            public final static double STAGE_HEIGHT = STAGE_HEIGHT_SCALE * DeviceScreenProperties.SCREEN_HEIGHT;
+
+
+            private SaveNamePopUp() {}
+        }
 
         private GameScreenProperties() {}
     }
 
+    public static class EndGameScreenProperties {
+        public static double LEVEL_COMPLETE_FONT_SIZE = MainMenuScreenProperties.TITLE_FONT_SIZE;
+        public static double BUTTONS_FONT_SIZE = MainMenuScreenProperties.DESCRIPTION_FONT_SIZE;
+
+        private EndGameScreenProperties() {}
+    }
+
+
+    public static class BadLevelScreenProperties {
+        public static double BAD_LEVEL_FONT_SIZE = MainMenuScreenProperties.TITLE_FONT_SIZE;
+        public static double DESCRIPTION_FONT_SIZE = MainMenuScreenProperties.DESCRIPTION_FONT_SIZE;
+        public static double BUTTONS_FONT_SIZE = DESCRIPTION_FONT_SIZE;
+
+        private BadLevelScreenProperties() {}
+    }
+
+    public static class ScoreScreenProperties {
+        public static double VIEW_ELEMENT_FONT_SIZE = MainMenuScreenProperties.SELECT_LEVEL_FONT_SIZE;
+        public final static double LEVEL_NAME_LABEL_RATIO_PERCENTS = 40;
+        public final static double AUTHOR_LABEL_WIDTH_RATIO_PERCENTS = 40;
+        public final static double TIME_LABEL_WIDTH_RATIO_PERCENTS = 10;
+        public final static double STEPS_LABEL_WIDTH_RATIO_PERCENTS = 10;
+
+        private ScoreScreenProperties() {}
+    }
 
 
 

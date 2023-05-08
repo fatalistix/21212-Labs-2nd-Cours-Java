@@ -3,27 +3,35 @@ package ru.nsu.balashov.mousetrapgame.controllers;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import ru.nsu.balashov.mousetrapgame.HighScoresData;
 import ru.nsu.balashov.mousetrapgame.ImagesData;
 import ru.nsu.balashov.mousetrapgame.ScreenSwitcher;
 import ru.nsu.balashov.mousetrapgame.controllers.switching.SwitchingController;
 import ru.nsu.balashov.mousetrapgame.game.GameModel;
+import ru.nsu.balashov.mousetrapgame.settings.GUIProperties;
 import ru.nsu.balashov.mousetrapgame.settings.Settings;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+
+import ru.nsu.balashov.mousetrapgame.HighScoresData.HighScoresFactory.ScoreData;
 
 public class GameController implements SwitchingController {
     private ScreenSwitcher scSwitcher;
@@ -144,16 +152,25 @@ public class GameController implements SwitchingController {
 
     @Override
     public void initController() {
+        reset();
         ArrayList<GameModel.FieldObjectBaseData> graphicObjects;
         try {
             graphicObjects = model.initLevel();
         } catch (GameModel.InitLevelException e) {
-            //!!!!!! NEW WINDOW FOR BAD LEVELS
-            throw new RuntimeException();
+            scSwitcher.setScreen(GUIProperties.badLevelID);
+            return;
         }
 
         levelNameLabel.setText(model.getLevelName());
         stepsMadeResultLabel.setText(String.valueOf(stepsMade));
+        ScoreData bestScore = Objects.requireNonNull(HighScoresData.getInstance()).getBestLevelScore(model.getLevelName());
+        if (bestScore == null) {
+            bestScoreResultLabel.setText("Level not passed (yet?)");
+        } else {
+            bestScoreResultLabel.setText(String.format("%02d:%02d:%02d by %s with %d steps",
+                    bestScore.seconds() / 3600, (bestScore.seconds() / 60) % 60, bestScore.seconds() % 60,
+                    bestScore.author(), bestScore.steps()));
+        }
 
         for (int i = 0; i < graphicObjects.size(); ++i) {
             ImageView iv = new ImageView(ImagesData.getInstance().getImageByName(graphicObjects.get(i).id()));
@@ -211,41 +228,13 @@ public class GameController implements SwitchingController {
 
 
 
-//    @FXML
-//    private void onGameFieldMouseDragged(MouseEvent mouseEvent) {
-//        if (model.canSelectedBeDragged()) {
-//            if (model.getSelectedX() != getCellByMousePos(mouseEvent.getX())
-//                    || model.getSelectedY() != getCellByMousePos(mouseEvent.getY())) {
-//                model.move(getCellByMousePos(mouseEvent.getX()), getCellByMousePos(mouseEvent.getY()));
-//            }
-//
-//            if (mouseEvent.getX() >= startDragPosX) {
-//                if (model.canSelectedBeMovedRight() || (getPixelByCord(model.getUpdatedX()) - imageShiftX >= mouseEvent.getX())) {
-//                    graphicsPlayableObjects.get(model.getSelectedForDraggingId()).setX(mouseEvent.getX() + imageShiftX);
-//                }
-//            } else {
-//                if (model.canSelectedBeMovedLeft() || (getPixelByCord(model.getUpdatedX()) - imageShiftX <= mouseEvent.getX())) {
-//                    graphicsPlayableObjects.get(model.getSelectedForDraggingId()).setX(mouseEvent.getX() + imageShiftX);
-//                }
-//            }
-//            if (mouseEvent.getY() >= startDragPosY) {
-//                if (model.canSelectedBeMovedDown() || (getPixelByCord(model.getUpdatedY()) - imageShiftY >= mouseEvent.getY())) {
-//                    graphicsPlayableObjects.get(model.getSelectedForDraggingId()).setY(mouseEvent.getY() + imageShiftY);
-//                }
-//            } else {
-//                if (model.canSelectedBeMovedUp() || (getPixelByCord(model.getUpdatedY()) - imageShiftY <= mouseEvent.getY())) {
-//                    graphicsPlayableObjects.get(model.getSelectedForDraggingId()).setY(mouseEvent.getY() + imageShiftY);
-//                }
-//            }
-//        }
-//    }
-
     private int cellShiftByMouseShift(double mouseShift) {
         int fullyBlocksShifted = (int) (mouseShift / (Settings.GameScreenProperties.PIXELS_PER_BLOCK +
                 Settings.GameScreenProperties.LINE_STROKE_WIDTH));
         return ((Math.abs(mouseShift - fullyBlocksShifted *
                 (Settings.GameScreenProperties.PIXELS_PER_BLOCK + Settings.GameScreenProperties.LINE_STROKE_WIDTH)) >
-                Settings.GameScreenProperties.PIXELS_FOR_SHIFT) ? (int) Math.signum(mouseShift) : 0) + fullyBlocksShifted;
+                Settings.GameScreenProperties.PIXELS_FOR_SHIFT) ? (int) Math.signum(mouseShift) : 0) +
+                fullyBlocksShifted;
     }
 
     private boolean shiftByOneCell(double mouseShift) {
@@ -255,22 +244,26 @@ public class GameController implements SwitchingController {
     @FXML
     private void onGameFieldMouseDragged(MouseEvent mouseEvent) {
         if (model.canSelectedBeDragged()) {
-            if (model.canSelectedBeMovedRight() && mouseEvent.getX() >= startDragPosX) {
+            if (model.canSelectedBeMovedRight() && mouseEvent.getX() >= startDragPosX ||
+                    model.canSelectedBeMovedLeft() && mouseEvent.getX() <= startDragPosX) {
                 graphicsPlayableObjects.get(model.getSelectedForDraggingId()).setX(mouseEvent.getX() + imageShiftX);
             }
-            if (model.canSelectedBeMovedLeft() && mouseEvent.getX() <= startDragPosX) {
-                graphicsPlayableObjects.get(model.getSelectedForDraggingId()).setX(mouseEvent.getX() + imageShiftX);
-            }
-            if (model.canSelectedBeMovedUp() && mouseEvent.getY() <= startDragPosY) {
-                graphicsPlayableObjects.get(model.getSelectedForDraggingId()).setY(mouseEvent.getY() + imageShiftY);
-            }
-            if (model.canSelectedBeMovedDown() && mouseEvent.getY() >= startDragPosY) {
+            if (model.canSelectedBeMovedUp() && mouseEvent.getY() <= startDragPosY ||
+                    model.canSelectedBeMovedDown() && mouseEvent.getY() >= startDragPosY) {
                 graphicsPlayableObjects.get(model.getSelectedForDraggingId()).setY(mouseEvent.getY() + imageShiftY);
             }
 
+
             if (shiftByOneCell(mouseEvent.getX() - startDragPosX) ||
                     shiftByOneCell(mouseEvent.getY() - startDragPosY)) {
-                model.move(getCellByMousePos(mouseEvent.getX()), getCellByMousePos(mouseEvent.getY()));
+                if (model.move(getCellByMousePos(mouseEvent.getX()) + cellShiftByMouseShift(mouseEvent.getX() - startDragPosX),
+                        getCellByMousePos(mouseEvent.getY()) + cellShiftByMouseShift(mouseEvent.getY() - startDragPosY))) {
+                    startDragPosX = getPixelByCord(model.getUpdatedX()) - imageShiftX;
+                    startDragPosY = getPixelByCord(model.getUpdatedY()) - imageShiftY;
+                } else {
+//                    System.out.println(mouseEvent.getX() + " : " + mouseEvent.getY() + " : " + startDragPosX + " : " + startDragPosY);
+                    movePictureToCell(model.getUpdatedX(), model.getUpdatedY(), model.getSelectedForDraggingId());
+                }
             }
         }
     }
@@ -293,36 +286,83 @@ public class GameController implements SwitchingController {
     }
 
     @FXML
-    private void onGameFieldMouseReleased(MouseEvent mouseEvent) {
+    private void onGameFieldMouseReleased() {
         if (model.canSelectedBeDragged()) {
             movePictureToCell(model.getUpdatedX(), model.getUpdatedY(), model.getSelectedForDraggingId());
+            if (model.isObjectMoved()) {
+                stepsMadeResultLabel.setText(String.valueOf(++stepsMade));
+            }
         }
         model.unselectForDragging();
         if (model.gameEnded()) {
             timeline.stop();
-            Objects.requireNonNull(HighScoresData.getInstance()).saveScore(model.getLevelName(), "xf", secondsPassed);
-            if (!Objects.requireNonNull(HighScoresData.getInstance()).storeScores()) {
-                Alert warnAlert = new Alert(Alert.AlertType.WARNING);
-                warnAlert.setHeaderText("Cannot store high scores");
-                warnAlert.setContentText("Cannot store high scores via some reasons");
-                warnAlert.showAndWait();
+            int rememberedSeconds = secondsPassed;
+            int rememberedSteps   = stepsMade;
+
+            Stage saveScoreStage = new Stage();
+
+            GridPane saveScoreGrid = new GridPane();
+            for (int i = 0; i < 2; ++i) {
+                ColumnConstraints cc = new ColumnConstraints();
+                cc.setPercentWidth(50);
+                saveScoreGrid.getColumnConstraints().add(cc);
+
+                RowConstraints rc = new RowConstraints();
+                rc.setPercentHeight(50);
+                saveScoreGrid.getRowConstraints().add(rc);
             }
+
+            TextField saveScoreTextField = new TextField();
+            Button saveScoreButton = new Button("Save");
+            Button dontSaveScoreButton = new Button("Don't save");
+
+            saveScoreTextField.setFont(bestScoreFont);
+            saveScoreButton.setFont(bestScoreFont);
+            dontSaveScoreButton.setFont(bestScoreFont);
+
+            GridPane.setConstraints(saveScoreTextField, 0, 0, 2, 1, HPos.CENTER, VPos.CENTER);
+            GridPane.setConstraints(saveScoreButton, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER);
+            GridPane.setConstraints(dontSaveScoreButton, 1, 1, 1, 1, HPos.CENTER, VPos.CENTER);
+
+            saveScoreButton.setOnAction(ae -> {
+                Objects.requireNonNull(HighScoresData.getInstance()).saveScore(model.getLevelName(),
+                        saveScoreTextField.getText(), rememberedSeconds, rememberedSteps);
+                if (!Objects.requireNonNull(HighScoresData.getInstance()).storeScores()) {
+                    Alert warnAlert = new Alert(Alert.AlertType.WARNING);
+                    warnAlert.setHeaderText("Cannot store high scores");
+                    warnAlert.setContentText("Cannot store high scores via some reasons");
+                    warnAlert.showAndWait();
+                }
+                saveScoreStage.close();
+            });
+
+            dontSaveScoreButton.setOnAction(ae -> saveScoreStage.close());
+
+            saveScoreGrid.getChildren().addAll(saveScoreButton, saveScoreTextField, dontSaveScoreButton);
+
+            Scene saveScoreScene = new Scene(saveScoreGrid);
+            saveScoreStage.setScene(saveScoreScene);
+            saveScoreStage.setWidth(Settings.GameScreenProperties.SaveNamePopUp.STAGE_WIDTH);
+            saveScoreStage.setHeight(Settings.GameScreenProperties.SaveNamePopUp.STAGE_HEIGHT);
+            saveScoreStage.setResizable(false);
+            saveScoreStage.show();
+
             scSwitcher.setScreen("endgame");
         }
     }
 
     @FXML
-    private void onGameFieldMouseExited(MouseEvent mouseEvent) {
+    private void onGameFieldMouseExited() {
         mouseOnImagePane = false;
     }
 
     @FXML
-    private void onGameFieldMouseEntered(MouseEvent mouseEvent) {
+    private void onGameFieldMouseEntered() {
         mouseOnImagePane = true;
     }
 
     @FXML
-    private void onBaseGridDragged(MouseEvent mouseEvent) {
+    private void onBaseGridDragged() {
         if (!mouseOnImagePane && model.canSelectedBeDragged()) {
             movePictureToCell(model.getUpdatedX(), model.getUpdatedY(), model.getSelectedForDraggingId());
         }
@@ -331,8 +371,12 @@ public class GameController implements SwitchingController {
 
     @FXML
     private void resetGame(ActionEvent actionEvent) {
-        reset();
-        initController();
+        HighScoresData.getInstance().clearScores();
     }
 
+    @FXML
+    private void showScores(ActionEvent actionEvent) {
+        timeline.stop();
+        scSwitcher.setScreen(GUIProperties.scoresID);
+    }
 }

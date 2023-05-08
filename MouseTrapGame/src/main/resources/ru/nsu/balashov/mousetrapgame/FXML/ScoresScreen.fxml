@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.*?>
+
+
+
+<GridPane xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="ru.nsu.balashov.mousetrapgame.controllers.ScoresController">
+    <rowConstraints>
+        <RowConstraints percentHeight="90"/>
+        <RowConstraints percentHeight="10"/>
+    </rowConstraints>
+    <columnConstraints>
+        <ColumnConstraints percentWidth="100"/>
+    </columnConstraints>
+
+
+    <ListView fx:id="scoresList"
+              GridPane.rowSpan="1" GridPane.columnSpan="1"
+              GridPane.rowIndex="0" GridPane.columnIndex="0"
+              GridPane.valignment="CENTER" GridPane.halignment="CENTER"/>
+    <Button fx:id="backButton" text="Back"
+            GridPane.rowSpan="1" GridPane.columnSpan="1"
+            GridPane.rowIndex="1" GridPane.columnIndex="0"
+            GridPane.valignment="CENTER" GridPane.halignment="CENTER"
+            onAction="#backButtonPressed"/>
+
+</GridPane>
