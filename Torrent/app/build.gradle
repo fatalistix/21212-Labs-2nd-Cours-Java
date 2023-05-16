@@ -26,6 +26,12 @@ dependencies {
     // https://mvnrepository.com/artifact/net.seedboxer/bencode
     implementation 'net.seedboxer:bencode:1.0'
 
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    implementation 'com.google.code.gson:gson:2.10.1'
+
+    // https://mvnrepository.com/artifact/commons-codec/commons-codec
+    implementation 'commons-codec:commons-codec:1.15'
+
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
