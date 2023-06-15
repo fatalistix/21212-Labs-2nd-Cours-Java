@@ -1,0 +1,60 @@
+!SESSION 2023-05-30 00:08:51.551 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=20
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -javaagent:/home/vyacheslav/.config/vim-easycomplete/servers/java/lombok.jar --add-modules=ALL-SYSTEM --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED -XX:+AggressiveOpts -XX:PermSize=512m -XX:MaxPermSize=512m -Xmx2048m -Xms512m -Xmn512m -Xss2m -XX:+UseG1GC -XX:+UseLargePages
+Command-line arguments:  -data ./ -javaagent:/home/vyacheslav/.config/vim-easycomplete/servers/java/lombok.jar --add-modules=ALL-SYSTEM --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED -XX:+AggressiveOpts -XX:PermSize=512m -XX:MaxPermSize=512m -Xmx2048m -Xms512m -Xmn512m -Xss2m -XX:+UseG1GC -XX:+UseLargePages
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-05-30 00:08:53.402
+!MESSAGE class org.eclipse.jdt.ls.core.internal.JavaLanguageServerPlugin is started
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-05-30 00:08:53.609
+!MESSAGE Main thread is waiting
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-05-30 00:08:53.657
+!MESSAGE >> initialized
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-05-30 00:08:53.659
+!MESSAGE >> initialization job finished
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-05-30 00:08:53.664
+!MESSAGE >> registerWatchers'
+
+!ENTRY org.eclipse.core.jobs 4 2 2023-05-30 00:08:53.666
+!MESSAGE An internal error occurred during: "Initialize workspace".
+!STACK 0
+java.lang.NullPointerException: Cannot invoke "org.eclipse.jdt.ls.core.internal.preferences.ClientPreferences.isWorkspaceChangeWatchedFilesDynamicRegistered()" because the return value of "org.eclipse.jdt.ls.core.internal.preferences.PreferenceManager.getClientPreferences()" is null
+	at org.eclipse.jdt.ls.core.internal.managers.StandardProjectsManager.registerWatchers(StandardProjectsManager.java:424)
+	at org.eclipse.jdt.ls.core.internal.handlers.JDTLanguageServer$2.run(JDTLanguageServer.java:293)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SESSION 2023-05-30 01:00:15.248 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=20
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -javaagent:/home/vyacheslav/.config/vim-easycomplete/servers/java/lombok.jar --add-modules=ALL-SYSTEM --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED -XX:+AggressiveOpts -XX:PermSize=512m -XX:MaxPermSize=512m -Xmx2048m -Xms512m -Xmn512m -Xss2m -XX:+UseG1GC -XX:+UseLargePages
+Command-line arguments:  -data ./ -javaagent:/home/vyacheslav/.config/vim-easycomplete/servers/java/lombok.jar --add-modules=ALL-SYSTEM --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED -XX:+AggressiveOpts -XX:PermSize=512m -XX:MaxPermSize=512m -Xmx2048m -Xms512m -Xmn512m -Xss2m -XX:+UseG1GC -XX:+UseLargePages
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-05-30 01:00:16.408
+!MESSAGE class org.eclipse.jdt.ls.core.internal.JavaLanguageServerPlugin is started
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-05-30 01:00:16.560
+!MESSAGE Main thread is waiting
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-05-30 01:00:16.602
+!MESSAGE >> initialized
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-05-30 01:00:16.604
+!MESSAGE >> initialization job finished
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-05-30 01:00:16.607
+!MESSAGE >> registerWatchers'
+
+!ENTRY org.eclipse.core.jobs 4 2 2023-05-30 01:00:16.610
+!MESSAGE An internal error occurred during: "Initialize workspace".
+!STACK 0
+java.lang.NullPointerException: Cannot invoke "org.eclipse.jdt.ls.core.internal.preferences.ClientPreferences.isWorkspaceChangeWatchedFilesDynamicRegistered()" because the return value of "org.eclipse.jdt.ls.core.internal.preferences.PreferenceManager.getClientPreferences()" is null
+	at org.eclipse.jdt.ls.core.internal.managers.StandardProjectsManager.registerWatchers(StandardProjectsManager.java:424)
+	at org.eclipse.jdt.ls.core.internal.handlers.JDTLanguageServer$2.run(JDTLanguageServer.java:293)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)

@@ -143,3 +143,33 @@ java.lang.NullPointerException: Cannot invoke "org.eclipse.jdt.ls.core.internal.
 	at org.eclipse.jdt.ls.core.internal.managers.StandardProjectsManager.registerWatchers(StandardProjectsManager.java:424)
 	at org.eclipse.jdt.ls.core.internal.handlers.JDTLanguageServer$2.run(JDTLanguageServer.java:293)
 	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!SESSION 2023-06-11 02:43:22.377 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=20
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -javaagent:/home/vyacheslav/.config/vim-easycomplete/servers/java/lombok.jar --add-modules=ALL-SYSTEM --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED -XX:+AggressiveOpts -XX:PermSize=512m -XX:MaxPermSize=512m -Xmx2048m -Xms512m -Xmn512m -Xss2m -XX:+UseG1GC -XX:+UseLargePages
+Command-line arguments:  -data ./ -javaagent:/home/vyacheslav/.config/vim-easycomplete/servers/java/lombok.jar --add-modules=ALL-SYSTEM --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED -XX:+AggressiveOpts -XX:PermSize=512m -XX:MaxPermSize=512m -Xmx2048m -Xms512m -Xmn512m -Xss2m -XX:+UseG1GC -XX:+UseLargePages
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-06-11 02:43:23.789
+!MESSAGE class org.eclipse.jdt.ls.core.internal.JavaLanguageServerPlugin is started
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-06-11 02:43:23.998
+!MESSAGE Main thread is waiting
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-06-11 02:43:24.040
+!MESSAGE >> initialized
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-06-11 02:43:24.043
+!MESSAGE >> initialization job finished
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-06-11 02:43:24.047
+!MESSAGE >> registerWatchers'
+
+!ENTRY org.eclipse.core.jobs 4 2 2023-06-11 02:43:24.049
+!MESSAGE An internal error occurred during: "Initialize workspace".
+!STACK 0
+java.lang.NullPointerException: Cannot invoke "org.eclipse.jdt.ls.core.internal.preferences.ClientPreferences.isWorkspaceChangeWatchedFilesDynamicRegistered()" because the return value of "org.eclipse.jdt.ls.core.internal.preferences.PreferenceManager.getClientPreferences()" is null
+	at org.eclipse.jdt.ls.core.internal.managers.StandardProjectsManager.registerWatchers(StandardProjectsManager.java:424)
+	at org.eclipse.jdt.ls.core.internal.handlers.JDTLanguageServer$2.run(JDTLanguageServer.java:293)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)

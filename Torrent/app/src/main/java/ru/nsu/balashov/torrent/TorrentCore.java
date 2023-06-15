@@ -1,40 +1,63 @@
 package ru.nsu.balashov.torrent;
 
-import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.RandomAccessFile;
-import java.nio.file.Files;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.nio.channels.Selector;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class TorrentCore {
-    private SavedFilesManager savedFilesManager;
-
+    private final SavedFilesManager savedFilesManager;
+    private Thread uploadListener;
+    private final ThreadPoolTasksManager threadPool = new ThreadPoolTasksManager();
+    private final static int DEFAULT_LISTENING_PORT = 6969;
+    private final Selector serverSelector = Selector.open();
 
     /**
-     * @throws IOException when problems with loading saved data from .json file
+     * @throws IOException when problems with loading saved data from json file
      */
     public TorrentCore() throws IOException {
         savedFilesManager = new SavedFilesManager();
     }
 
+    public void uploadTorrents() {
+//        uploadListener = new Thread(() -> {
+//            try (ServerSocket serverSocketListener = new ServerSocket(DEFAULT_LISTENING_PORT)) {
+//                System.out.println("SERVER SOCKET CREATED");
+//                while (true) {
+//                    Socket connectedSocket = serverSocketListener.accept();
+//                    System.out.printf("NEW CONNECTION FROM %s%n", connectedSocket.getInetAddress().getHostAddress());
+//                    threadPool.submitUpload(connectedSocket, savedFilesManager);
+//                }
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        });
+        uploadListener.start();
+    }
 
-    /**
-     * @param path to .torrent file
-     * @throws IOException if specified {@code path} it's not a torrent file
-     *
-     */
-    private void downloadTorrent(String path, String pathToSave, ArrayList<String> ipWithPortList) throws IOException {
-        File torrentFile = new File(path);
-        TorrentFileData torrentFileData = new TorrentFileData();
-        try (InputStream torrentFileIn = Files.newInputStream(torrentFile.toPath())) {
-            torrentFileData.decode(torrentFileIn);
-        }
+
+    public void downloadTorrent(TorrentFileData torrentFileData, String pathToSave, ArrayList<String> ipWithPortList) throws RecordExistsException, FileNotFoundException {
+//        if (savedFilesManager.exists(torrentFileData)) {
+//            throw new RecordExistsException("Downloaded instance already exists");
+//        }
+//        RandomAccessFile downloadedInstanceRAF = new RandomAccessFile(pathToSave +
+//                    System.getProperty("file.separator") + torrentFileData.getTorrentName(), "rw");
+//        threadPool.submitDownload(torrentFileData, downloadedInstanceRAF, ipWithPortList);
+    }
+
+    public void addDownloadedTorrent(TorrentFileData torrentFileData, String pathToData) throws RecordExistsException {
         if (savedFilesManager.exists(torrentFileData)) {
-            throw new IllegalArgumentException("Downloaded instance already exists");
+            throw new RecordExistsException("Downloaded instance already exists");
         }
+        savedFilesManager.registerDownloaded(torrentFileData, pathToData);
+    }
 
+    public static class RecordExistsException extends Exception {
+        public RecordExistsException(String message) {
+            super(message);
+        }
     }
 }

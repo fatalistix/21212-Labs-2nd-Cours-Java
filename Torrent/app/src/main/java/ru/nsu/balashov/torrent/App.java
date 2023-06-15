@@ -1,18 +1,143 @@
 package ru.nsu.balashov.torrent;
 
+import com.google.common.base.Splitter;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class App {
-    private static void start(InputStream inputStream, OutputStream outputStream, String[] args) throws IOException {
-        String torrentPath = "/home/vyacheslav/Documents/Programming/OOOP/21212/21212-Labs-2nd-Cours-Java/Torrent/app/src/main/resources/ru/nsu/balashov/torrent/TorrentFiles/EndeavourOS_Cassini_Nova-03-2023_R1.iso.torrent";
-        File f = new File(torrentPath);
-        InputStream in = new FileInputStream(f);
-        System.out.println(Hex.encodeHexString(DigestUtils.sha1(in)));
+    private static class StopException extends Exception {}
+
+//    private static boolean renameTorrent(Scanner scanner, PrintStream output, TorrentFileData torrentFileData) {
+//        output.println("E==> This torrent already exists");
+//        output.print  ("?==> Would you like to save it with another name? [y/n]: ");
+//        String answer = scanner.nextLine();
+//        if (answer.equalsIgnoreCase("y") || answer.equalsIgnoreCase("yes")) {
+//            while (true) {
+//                output.print(" ==> Enter new name: ");
+//                String newName = scanner.nextLine();
+//                if (!newName.equals(torrentFileData.getTorrentName())) {
+//                    torrentFileData.setNewTorrentName(newName);
+//                    return true;
+//                }
+//                output.println("E==> Already exists");
+//            }
+//        }
+//        return false;
+//    }
+
+
+    private static void start(InputStream input, PrintStream output, String[] args) {
+        TorrentCore core;
+
+        try {
+            core = new TorrentCore();
+        } catch (IOException e) {
+            output.println("Error reading from config.json file. Downloads data corrupted");
+            return;
+        }
+
+        try (Scanner scanner = new Scanner(input)) {
+            while (true) {
+                output.print("~~> ");
+                switch (scanner.nextLine()) {
+                    case "download" -> {
+                        output.print  (" ==> Enter path to torrent file: ");
+                        String torrentFilepath  = scanner.nextLine();
+                        output.print  (" ==> Enter path to download folder: ");
+                        String downloadFilepath = scanner.nextLine();
+                        output.println(" ==> Enter list of ip with format 'ip:port', separated via space:");
+                        output.print  (" ==> ");
+                        ArrayList<String> ipList = new ArrayList<>(Splitter.on(' ')
+                                .splitToList(scanner.nextLine()));
+                        TorrentFileData torrentFileData = new TorrentFileData();
+                        try {
+                            torrentFileData.decode(torrentFilepath);
+                            core.downloadTorrent(torrentFileData, downloadFilepath, ipList);
+                            output.println(" ==> Downloading started");
+                        } catch (TorrentCore.RecordExistsException e) {
+//                            if (renameTorrent(scanner, output, torrentFileData)) {
+//                                try {
+//                                    core.downloadTorrent(torrentFileData, downloadFilepath, ipList);
+//                                    output.println(" ==> Downloading started");
+//                                } catch (Exception newExc) {
+//                                    output.println("E==> Cannot start downloading, please try again\nError message: "
+//                                            + newExc.getMessage());
+//                                }
+//                            }
+                            output.println("E==> Torrent already exists");
+                        } catch (FileNotFoundException | SecurityException e) {
+                            output.println("E==> Cannot download to that directory");
+                        } catch (IOException e) {
+                            output.println("E==> Torrent file damaged");
+                        }
+                    }
+                    case "upload" -> {
+                        core.uploadTorrents();
+                        output.println(" ==> Started uploading torrents");
+                    }
+                    case "add" -> {
+                        output.print(" ==> Enter path to torrent file: ");
+                        String torrentFilePath = scanner.nextLine();
+                        output.print(" ==> Enter path to downloaded file: ");
+                        String instanceFilePath = scanner.nextLine();
+                        TorrentFileData torrentFileData = new TorrentFileData();
+                        try {
+                            torrentFileData.decode(torrentFilePath);
+                            core.addDownloadedTorrent(torrentFileData, instanceFilePath);
+                            output.println(" ==> Added successfully");
+                        } catch (IOException e) {
+                            output.println("E==> Torrent file damaged");
+                        } catch (TorrentCore.RecordExistsException e) {
+                            if (renameTorrent(scanner, output, torrentFileData)) {
+                                try {
+                                    core.addDownloadedTorrent(torrentFileData, instanceFilePath);
+                                    output.println(" ==> Added successfully");
+                                } catch (Exception newExc) {
+                                    output.println("E==> Cannot add instance, please try again\nError message: "
+                                            + newExc.getMessage());
+                                }
+                            }
+                        }
+
+                    }
+                    case "exit" -> {
+                        throw new StopException();
+                    }
+                    case "DEBUG" -> {
+
+                    }
+                }
+            }
+        } catch (StopException e) {
+            output.println(" ==> EXITING...");
+        } catch (Exception e) {
+            output.println("E==> Got unexpected exception: " + e.getMessage());
+        }
     }
+
+
+    public static void test() {
+        TorrentFileData torrentFileData = new TorrentFileData();
+        try {
+            torrentFileData.decode("/home/vyacheslav/Documents/Programming/OOOP/21212/21212-Labs-2nd-Cours-Java/Torrent/app/src/main/resources/ru/nsu/balashov/torrent/TorrentFiles/EndeavourOS_Cassini_Nova-03-2023_R1.iso.torrent");
+        } catch (IOException e) {
+            System.out.println("GOT EXCEPTION: " + e.getMessage());
+        }
+
+    }
+
+    public static void main(String[] args) {
+//        start(System.in, System.out, args);
+        test();
+    }
+}
+
+
 
 //    public static record Record(String[] array, long size) {}
 
@@ -25,13 +150,6 @@ public class App {
 //        gson.toJson(second, writer);
 //        System.out.println(writer);
 //    }
-
-
-    public static void main(String[] args) throws IOException {
-        start(System.in, System.out, args);
-    }
-}
-
 
 
 

@@ -8,8 +8,12 @@
 
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
+    id 'java'
     id 'application'
 }
+
+group 'ru.nsu.balashov'
+version '1.0-SNAPSHOT'
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -23,9 +27,6 @@ dependencies {
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:31.1-jre'
 
-    // https://mvnrepository.com/artifact/net.seedboxer/bencode
-    implementation 'net.seedboxer:bencode:1.0'
-
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     implementation 'com.google.code.gson:gson:2.10.1'
 
@@ -34,8 +35,6 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.dampcake/bencode
     implementation 'com.dampcake:bencode:1.4'
-
-
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -47,20 +46,17 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = 'ru.nsu.balashov.torrent.App'
+    mainClass = 'ru.nsu.torrent.App'
+    mainModule = 'ru.nsu.balashov.torrent'
 }
+
+tasks.register('copyResources', Copy) {
+    from 'src/main/resources'
+    into 'build/resources/main'
+}
+
 
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
-}
-
-run {
-    standardInput = System.in;
-}
-
-jar {
-    manifest {
-        attributes 'Main-Class': application.mainClass
-    }
 }

@@ -9,10 +9,12 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 public class TorrentFileData {
@@ -25,7 +27,7 @@ public class TorrentFileData {
     private long singleFileLength = -1;
     private String torrentName = null;
     private long pieceLength = -1;
-    private ArrayList<String> sha1Sums = null;
+    private ArrayList<byte[]> sha1Sums = null;
     private byte[] infoHash = null;
 
 
@@ -54,32 +56,30 @@ public class TorrentFileData {
     @SuppressWarnings("unchecked")
     public void decode(@NonNull InputStream is) throws IOException {
         byte[] torrentFileBytes = is.readAllBytes();
-        Bencode bencode = new Bencode(StandardCharsets.US_ASCII);
+        Bencode bencode = new Bencode(StandardCharsets.UTF_8, true);
         Map<String, Object> torrentFileStructure = bencode.decode(torrentFileBytes, Type.DICTIONARY);
         for (String fileKeys : torrentFileStructure.keySet()) {
             switch (fileKeys) {
                 case "creation date"    -> creationTime = Instant.ofEpochSecond((long) torrentFileStructure.get(fileKeys));
-                case "url-list"         -> urlListStr   = (String) torrentFileStructure.get(fileKeys);
-                case "comment"          -> comment      = (String) torrentFileStructure.get(fileKeys);
+                case "url-list"         -> urlListStr   = new String(((ByteBuffer) torrentFileStructure.get(fileKeys)).array()).trim();
+                case "comment"          -> comment      = new String(((ByteBuffer) torrentFileStructure.get(fileKeys)).array()).trim();
                 case "announce-list"    -> announceList = (ArrayList<ArrayList<byte[]>>) torrentFileStructure.get(fileKeys);
-                case "created by"       -> author       = (String) torrentFileStructure.get(fileKeys);
-                case "announce"         -> announce     = (String) torrentFileStructure.get(fileKeys);
+                case "created by"       -> author       = new String(((ByteBuffer) torrentFileStructure.get(fileKeys)).array()).trim();
+                case "announce"         -> announce     = new String(((ByteBuffer) torrentFileStructure.get(fileKeys)).array()).trim();
                 case "info"             -> {
                     Map<String, Object> info = (Map<String, Object>) torrentFileStructure.get(fileKeys);
                     for (String infoKey : info.keySet()) {
                         switch (infoKey) {
                             case "pieces"       -> {
-                                sha1Sums = new ArrayList<>(Splitter.fixedLength(20).splitToList((String) info.get(infoKey)));
+                                byte[] buffer = ((ByteBuffer) info.get(infoKey)).array();
+                                sha1Sums = new ArrayList<>(buffer.length / 20);
+                                for (int i = 0; i < buffer.length; i += 20) {
+                                    sha1Sums.add(Arrays.copyOfRange(buffer, i, i + 20));
+                                }
                             }
-                            case "length"       -> {
-                                singleFileLength = (long) info.get(infoKey);
-                            }
-                            case "name"         -> {
-                                torrentName = (String) info.get(infoKey);
-                            }
-                            case "piece length" -> {
-                                pieceLength = (long) info.get(infoKey);
-                            }
+                            case "length"       -> singleFileLength = (long) info.get(infoKey);
+                            case "name"         -> torrentName = new String(((ByteBuffer) info.get(infoKey)).array()).trim();
+                            case "piece length" -> pieceLength = (long) info.get(infoKey);
 //                            case "files"        -> {
 //                                torrentFilesPartsList = new ArrayList<>();
 //                                for (Map<String, Object>  : (ArrayList<Map<String, Object>>) info.get(infoKey)) {
@@ -131,11 +131,11 @@ public class TorrentFileData {
         return pieceLength;
     }
 
-    public String getSha1ByIndex(int index) {
+    public byte[] getSha1ByIndex(int index) {
         return sha1Sums.get(index);
     }
-    public String[] getSha1Sums() {
-        return sha1Sums.toArray(new String[0]);
+    public byte[][] getSha1Sums() {
+        return sha1Sums.toArray(new byte[0][0]);
     }
     public byte[] getInfoHash() {
         return infoHash;
