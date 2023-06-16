@@ -28,7 +28,7 @@ public class TorrentFileData {
     private String torrentName = null;
     private long pieceLength = -1;
     private ArrayList<byte[]> sha1Sums = null;
-    private byte[] infoHash = null;
+    private ByteBuffer infoHash = null;
 
 
 
@@ -88,7 +88,7 @@ public class TorrentFileData {
 //                            }
                         }
                     }
-                    infoHash = DigestUtils.sha1(bencode.encode(info));
+                    infoHash = ByteBuffer.wrap(DigestUtils.sha1(bencode.encode(info)));
                 }
             }
         }
@@ -137,7 +137,7 @@ public class TorrentFileData {
     public byte[][] getSha1Sums() {
         return sha1Sums.toArray(new byte[0][0]);
     }
-    public byte[] getInfoHash() {
+    public ByteBuffer getInfoHash() {
         return infoHash;
     }
 }

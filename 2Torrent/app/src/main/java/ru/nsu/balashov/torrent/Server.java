@@ -12,7 +12,7 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 
-;
+
 
 
 public class Server {
@@ -65,6 +65,7 @@ public class Server {
                             socketChannel.register(selector, SelectionKey.OP_READ, channelByteBuffer);
                             TorrentBBMessagesParser.writeHandshake(channelByteBuffer);
                             socketChannel.write(channelByteBuffer);
+                            System.out.println("WROTE HANDSHAKE");
                         } catch (IOException ignore) {
                             //? Do nothing because if channel closed it shouldn't be in selector
                         }
@@ -75,21 +76,12 @@ public class Server {
                         ByteBuffer byteBuffer = (ByteBuffer) key.attachment();
                         byteBuffer.clear();
                         try {
-                            int code = socketChannel.read(byteBuffer);
-                            if (code == -1) {
-                                socketChannel.close();
-                                key.cancel();
-                                break;
-                            }
+                            TorrentBBMessagesParser.readAllMessageBytes(byteBuffer, socketChannel);
 
                             switch (TorrentBBMessagesParser.readMessageType(byteBuffer)) {
                                 case REQUEST_AVAILABLE -> {
 //                                    System.out.println("REQUEST_AVAILABLE");
-                                    byte[] infoHash = TorrentBBMessagesParser.Server.readRequestAvailable(byteBuffer);
-//                                    for (byte b : infoHash) {
-//                                        System.out.print(b + " ");
-//                                    }
-//                                    System.out.println();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
+                                    ByteBuffer infoHash = TorrentBBMessagesParser.Server.readRequestAvailable(byteBuffer);
                                     byte[] bitmask = savedFilesManager.getExistingParts(infoHash);
                                     if (bitmask == null) {
                                         TorrentBBMessagesParser.writeUnknown(byteBuffer);
@@ -126,6 +118,7 @@ public class Server {
                                 case UNKNOWN -> {}
                             }
                         } catch (IOException ignore) {
+                            System.out.println("KEY CANCELED");
                             key.cancel();
                         }
                     }

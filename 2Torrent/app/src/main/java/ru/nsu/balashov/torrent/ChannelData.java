@@ -1,20 +1,19 @@
 package ru.nsu.balashov.torrent;
 
-public class ChannelData {
-    private final byte[] infoHash;
-    private boolean dataActual = false;
+import java.nio.ByteBuffer;
 
-    public ChannelData(byte[] infoHash, boolean actual) {
+public class ChannelData {
+    private final ByteBuffer infoHash;
+    private final ByteBuffer byteBuffer;
+
+    public ChannelData(ByteBuffer infoHash, int capacity) {
         this.infoHash = infoHash;
-        this.dataActual = actual;
+        this.byteBuffer = ByteBuffer.allocate(capacity);
     }
-    public boolean isDataActual() {
-        return dataActual;
-    }
-    public byte[] getInfoHash() {
+    public ByteBuffer getInfoHash() {
         return infoHash;
     }
-    public void setDataActual(boolean actual) {
-        this.dataActual = actual;
+    public ByteBuffer getByteBuffer() {
+        return byteBuffer;
     }
 }

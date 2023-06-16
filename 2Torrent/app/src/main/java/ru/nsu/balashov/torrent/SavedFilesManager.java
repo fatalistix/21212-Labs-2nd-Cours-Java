@@ -9,22 +9,63 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SavedFilesManager {
-    private record DownloadedInfo(String pathToDownloaded, byte[][] sha1Sums, long singleFileLength, String name,
-                                  long pieceLength, byte[] infoHash) {}
-    private record FileWithBitmask(FileWrapper fileWrapper, byte[] bitmask) {}
-    public final static String pathToJson = "/home/vyacheslav/.config/xf/Saved.json";
-    private final ConcurrentHashMap<ByteBuffer, DownloadedInfo> allDownloadedInfo = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<ByteBuffer, FileWithBitmask> torrentsExistingPartsCache = new ConcurrentHashMap<>();
+    private record TorrentInfo(SerializableDownloadedInfo serializableInfo, FileWithBitmask file) {}
+    private record SerializableDownloadedInfo(String pathToDownloaded, byte[][] sha1Sums, long singleFileLength, String name,
+                                              long pieceLength, byte[] infoHash) {}
+    private record FileWithBitmask(FileWrapper fileWrapper, byte[] bitmask, int numOfPieces) {}
+    public final static String pathToJson = System.getProperty("user.home") + "/.config/xf/Saved1.json";
+//    private final ConcurrentHashMap<ByteBuffer, SerializableDownloadedInfo> allDownloadedInfo = new ConcurrentHashMap<>();
+//    private final ConcurrentHashMap<ByteBuffer, FileWithBitmask> torrentsExistingPartsCache = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<ByteBuffer, TorrentInfo> allDownloadedInfo = new ConcurrentHashMap<>();
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private final File jsonFile;
 
-    private byte[] createExistingPartsBitmask(final DownloadedInfo downloadedInfo, FileWrapper file) {
-        int numOfPieces = (int) (downloadedInfo.singleFileLength() / downloadedInfo.pieceLength()
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public SavedFilesManager() throws IOException {
+        jsonFile = new File(pathToJson);
+        if (!jsonFile.exists()) {
+            jsonFile.createNewFile();
+            return;
+        }
+        try (InputStream jsonInputStream = new FileInputStream(jsonFile)) {
+            JsonArray mainJsonArray = gson.fromJson(new InputStreamReader(jsonInputStream, StandardCharsets.UTF_8),
+                    JsonArray.class);
+            if (mainJsonArray != null) {
+                for (JsonElement dataJe : mainJsonArray) {
+                    SerializableDownloadedInfo instance = gson.fromJson(dataJe, SerializableDownloadedInfo.class);
+//                    for (byte b : instance.infoHash) {
+//                        System.out.print(b + " ");
+//                    }
+//                    System.out.println();
+                    System.out.println(instance);
+                    try {
+                        FileWrapper fileWrapper = new FileWrapper(instance.pathToDownloaded(), (int) instance.pieceLength(), instance.singleFileLength());
+                        byte[] existingParts = createExistingPartsBitmask(instance, fileWrapper);
+                        if (existingParts != null) {
+                            allDownloadedInfo.put(ByteBuffer.wrap(instance.infoHash()), new TorrentInfo(instance,
+                                    new FileWithBitmask(fileWrapper, existingParts, countNumOfPieces(instance))));
+                        }
+                    } catch (IOException ignored) {
+
+                    }
+                }
+            }
+        }
+    }
+
+    private int countNumOfPieces(SerializableDownloadedInfo downloadedInfo) {
+        return (int) (downloadedInfo.singleFileLength() / downloadedInfo.pieceLength()
                 + ((downloadedInfo.singleFileLength() % downloadedInfo.pieceLength() == 0) ? 0 : 1));
+    }
+
+    private byte[] createExistingPartsBitmask(final SerializableDownloadedInfo downloadedInfo, FileWrapper file) {
+        int numOfPieces = countNumOfPieces(downloadedInfo);
         byte[] pieceBuffer = new byte[(int) downloadedInfo.pieceLength()];
         byte[] bitfield = new byte[numOfPieces / Byte.SIZE + ((numOfPieces % Byte.SIZE == 0) ? 0 : 1)];
         int readBytes;
@@ -47,49 +88,17 @@ public class SavedFilesManager {
         return bitfield;
     }
 
-    public SavedFilesManager() throws IOException {
-        jsonFile = new File(pathToJson);
-        if (!jsonFile.exists()) {
-            jsonFile.createNewFile();
-            return;
-        }
-        try (InputStream jsonInputStream = new FileInputStream(jsonFile)) {
-            JsonArray mainJsonArray = gson.fromJson(new InputStreamReader(jsonInputStream, StandardCharsets.UTF_8),
-                    JsonArray.class);
-            if (mainJsonArray != null) {
-                for (JsonElement dataJe : mainJsonArray) {
-                    DownloadedInfo instance = gson.fromJson(dataJe, DownloadedInfo.class);
-//                    for (byte b : instance.infoHash) {
-//                        System.out.print(b + " ");
-//                    }
-//                    System.out.println();
-                    System.out.println(instance);
-                    try {
-                        FileWrapper fileWrapper = new FileWrapper(instance.pathToDownloaded(), (int) instance.pieceLength(), instance.singleFileLength());
-                        byte[] existingParts = createExistingPartsBitmask(instance, fileWrapper);
-                        if (existingParts != null) {
-                            allDownloadedInfo.put(ByteBuffer.wrap(instance.infoHash()), instance);
-                            torrentsExistingPartsCache.put(ByteBuffer.wrap(instance.infoHash()),
-                                    new FileWithBitmask(fileWrapper, existingParts));
-                        }
-                    } catch (IOException ignored) {
-
-                    }
-                }
-            }
-        }
-    }
-
     public void registerDownloaded(TorrentFileData torrentFileData, String pathToDownloaded) throws RecordExistsException, IOException {
-        if (allDownloadedInfo.containsKey(ByteBuffer.wrap(torrentFileData.getInfoHash()))) {
+        if (allDownloadedInfo.containsKey(torrentFileData.getInfoHash())) {
             throw new RecordExistsException(torrentFileData.getTorrentName() + " already exists");
         }
-        allDownloadedInfo.put(ByteBuffer.wrap(torrentFileData.getInfoHash()), new DownloadedInfo(pathToDownloaded,
+        SerializableDownloadedInfo sDInfo = new SerializableDownloadedInfo(pathToDownloaded,
                 torrentFileData.getSha1Sums(), torrentFileData.getSingleFileLength(),
-                torrentFileData.getTorrentName(), torrentFileData.getPieceLength(), torrentFileData.getInfoHash()));
+                torrentFileData.getTorrentName(), torrentFileData.getPieceLength(), torrentFileData.getInfoHash().array());
         FileWrapper fileWrapper = new FileWrapper(pathToDownloaded, (int) torrentFileData.getPieceLength(), torrentFileData.getSingleFileLength());
-        torrentsExistingPartsCache.put(ByteBuffer.wrap(torrentFileData.getInfoHash()),
-                new FileWithBitmask(fileWrapper, createExistingPartsBitmask(allDownloadedInfo.get(ByteBuffer.wrap(torrentFileData.getInfoHash())), fileWrapper)));
+        byte[] existingParts = createExistingPartsBitmask(sDInfo, fileWrapper);
+        int numOfPieces = countNumOfPieces(sDInfo);
+        allDownloadedInfo.put(torrentFileData.getInfoHash(), new TorrentInfo(sDInfo, new FileWithBitmask(fileWrapper, existingParts, numOfPieces)));
     }
 
     public void storeDownloaded() throws IOException {
@@ -99,12 +108,16 @@ public class SavedFilesManager {
 //            throw new FileNotFoundException("Cannot open json file");
 //        }
         try (Writer writer = new FileWriter(jsonFile)) {
-            gson.toJson(allDownloadedInfo.values().toArray(new DownloadedInfo[0]), writer);
+            ArrayList<SerializableDownloadedInfo> serializableList = new ArrayList<>(allDownloadedInfo.size());
+            for (TorrentInfo torrentInfo : allDownloadedInfo.values()) {
+                serializableList.add(torrentInfo.serializableInfo());
+            }
+            gson.toJson(serializableList.toArray(), writer);
         }
     }
 
-    public byte[] getExistingParts(byte[] infoHash) {
-        if (!allDownloadedInfo.containsKey(ByteBuffer.wrap(infoHash))) {
+    public byte[] getExistingParts(ByteBuffer infoHash) {
+        if (!allDownloadedInfo.containsKey(infoHash)) {
             return null;
         }
 //        if (torrentsExistingPartsCache.containsKey(infoHash)) {
@@ -115,36 +128,44 @@ public class SavedFilesManager {
 //            torrentsExistingPartsCache.put(infoHash, existingParts);
 //            return existingParts;
 //        }
-        return torrentsExistingPartsCache.get(ByteBuffer.wrap(infoHash)).bitmask();
+        return allDownloadedInfo.get(infoHash).file().bitmask();
     }
 
-    public byte[] getPiece(byte[] infoHash, int index) {
-        if (!torrentsExistingPartsCache.containsKey(ByteBuffer.wrap(infoHash))) {
+
+    public byte[] getPiece(ByteBuffer infoHash, int index) {
+        if (!allDownloadedInfo.containsKey(infoHash)) {
             return null;
         }
         try {
-            return torrentsExistingPartsCache.get(ByteBuffer.wrap(infoHash)).fileWrapper.readPiece(index);
+            return allDownloadedInfo.get(infoHash).file().fileWrapper().readPiece(index);
         } catch (IOException e) {
             return null;
         }
     }
 
-    public void writePiece(byte[] infoHash, byte[] piece, int pieceIndex) throws IOException {
-        if (torrentsExistingPartsCache.containsKey(ByteBuffer.wrap(infoHash))) {
-            torrentsExistingPartsCache.get(ByteBuffer.wrap(infoHash)).fileWrapper().writePiece(piece, pieceIndex);
-            torrentsExistingPartsCache.get(ByteBuffer.wrap(infoHash)).bitmask[pieceIndex / 8] |= (1 >> (7 - pieceIndex % 8)) & 1;
+    public void writePiece(ByteBuffer infoHash, byte[] piece, int pieceIndex) throws IOException {
+        if (allDownloadedInfo.containsKey(infoHash)) {
+            allDownloadedInfo.get(infoHash).file().fileWrapper().writePiece(piece, pieceIndex);
+            allDownloadedInfo.get(infoHash).file().bitmask()[pieceIndex / 8] |= (1 >> (7 - pieceIndex % 8)) & 1;
         }
     }
 
-    public byte[] getHash(byte[] infoHash, int pieceIndex) {
-        if (torrentsExistingPartsCache.containsKey(ByteBuffer.wrap(infoHash))) {
-            return allDownloadedInfo.get(ByteBuffer.wrap(infoHash)).sha1Sums()[pieceIndex];
+    public byte[] getHash(ByteBuffer infoHash, int pieceIndex) {
+        if (allDownloadedInfo.containsKey(infoHash)) {
+            return allDownloadedInfo.get(infoHash).serializableInfo().sha1Sums()[pieceIndex];
         }
         return null;
     }
 
     public boolean exists(TorrentFileData torrentFileData) {
-        return allDownloadedInfo.containsKey(ByteBuffer.wrap(torrentFileData.getInfoHash()));
+        return allDownloadedInfo.containsKey(torrentFileData.getInfoHash());
+    }
+
+    public int getNumOfPieces(ByteBuffer infoHash) {
+        if (allDownloadedInfo.containsKey(infoHash)) {
+            return allDownloadedInfo.get(infoHash).file().numOfPieces();
+        }
+        return -1;
     }
 
     public static class RecordExistsException extends Exception {
@@ -152,5 +173,4 @@ public class SavedFilesManager {
             super(message);
         }
     }
-
 }

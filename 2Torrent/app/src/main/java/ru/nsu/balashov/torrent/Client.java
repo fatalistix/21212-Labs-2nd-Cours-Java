@@ -11,39 +11,62 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class Client {
-    private final Selector selector;
+    private final Selector channelsSelector;
     private final static int DEFAULT_BUFFER_SIZE = 2 * 1024 * 1024;
     private int byteBufferSize = DEFAULT_BUFFER_SIZE;
     //    private final HashMap<String, SelectionKey> channelsIpToKey = new HashMap<>();
-    private final HashMap<ByteBuffer, PieceConnectionsList> piecesLists = new HashMap<>();
-    private final ByteBuffer byteBuffer;
+//    private final HashMap<ByteBuffer, PieceConnectionsList> piecesLists = new HashMap<>();
+    private final PiecesSelector piecesSelector = new PiecesSelector();
+    private final SavedFilesManager savedFilesManager;
     private boolean killed = false;
 
-    public Client() throws IOException {
-        this.selector = Selector.open();
-        this.byteBuffer = ByteBuffer.allocate(byteBufferSize);
+    public Client(SavedFilesManager savedFilesManager) throws IOException {
+        this.channelsSelector = Selector.open();
+        this.savedFilesManager = savedFilesManager;
     }
 
-    public Client(int byteBufferSize) throws IOException {
-        this.selector = Selector.open();
+    public Client(SavedFilesManager savedFilesManager, int byteBufferSize) throws IOException {
+        this.channelsSelector = Selector.open();
         this.byteBufferSize = byteBufferSize;
-        this.byteBuffer = ByteBuffer.allocate(byteBufferSize);
+        this.savedFilesManager = savedFilesManager;
     }
 
-    public void startDownload(SavedFilesManager savedFilesManager) throws KilledException, IOException {
+    public void newDownload(ArrayList<String> ipWithPortList, ByteBuffer infoHash) throws KilledException {
+        if (killed) {
+            throw new KilledException("Killed");
+        }
+        for (String ipPort : ipWithPortList) {
+            List<String> bufList = Splitter.on(':').splitToList(ipPort);
+            if (bufList.size() != 2) {
+                continue;
+            }
+            String ip = bufList.get(0);
+            int port = Integer.parseInt(bufList.get(1));
+            try {
+                SocketChannel socketChannel = SocketChannel.open(new InetSocketAddress(ip, port));
+                socketChannel.configureBlocking(false);
+                socketChannel.register(channelsSelector, SelectionKey.OP_READ, new ChannelData(infoHash, byteBufferSize));
+                piecesSelector.register(infoHash, savedFilesManager.getExistingParts(infoHash), savedFilesManager.getNumOfPieces(infoHash));
+                System.out.println("KEY REGISTERED");
+            } catch (IOException ignore) {
+            }
+        }
+    }
+
+
+    public void startDownload() throws KilledException, IOException {
         if (killed) {
             throw new KilledException("killed");
         }
         while (true) {
-            int count = selector.select();
+            int count = channelsSelector.select();
             if (count == 0) {
                 continue;
             }
-            Iterator<SelectionKey> iter = selector.selectedKeys().iterator();
+            Iterator<SelectionKey> iter = channelsSelector.selectedKeys().iterator();
             while (iter.hasNext()) {
                 SelectionKey key = iter.next();
                 iter.remove();
@@ -51,107 +74,133 @@ public class Client {
                     System.out.println("SELECTED");
                     SocketChannel socketChannel = (SocketChannel) key.channel();
                     ChannelData channelData = (ChannelData) key.attachment();
-                    byteBuffer.clear();
+                    channelData.getByteBuffer().clear();
                     try {
-                        while (socketChannel.read(byteBuffer) != 0);
-                        System.out.println(byteBuffer);
+                        TorrentBBMessagesParser.readAllMessageBytes(channelData.getByteBuffer(), socketChannel);
+//                        System.out.println(byteBuffer);
                         System.out.println("READ");
                     } catch (IOException e) {
                         key.cancel();
-                        piecesLists.get(ByteBuffer.wrap(channelData.getInfoHash())).removeAssociation(key);
+                        socketChannel.close();
+//                        piecesLists.get(ByteBuffer.wrap(channelData.getInfoHash())).removeAssociation(key);
+                        piecesSelector.removeAllAssociations(channelData.getInfoHash(), key);
                     }
-                    ByteBuffer infoHashBB = ByteBuffer.wrap(channelData.getInfoHash());
-                    switch (TorrentBBMessagesParser.readMessageType(byteBuffer)) {
+                    switch (TorrentBBMessagesParser.readMessageType(channelData.getByteBuffer())) {
                         case RESPONSE_AVAILABLE -> {
                             System.out.println("RESPONSE_AVAILABLE");
-                            AvailableData availableData = TorrentBBMessagesParser.Client.readResponseAvailable(byteBuffer);
-                            piecesLists.get(infoHashBB).addAssociation(key, availableData.availableBitfield());
-                            if (piecesLists.get(ByteBuffer.wrap(channelData.getInfoHash())).getIndexesAsSet().isEmpty()) {
-                                socketChannel.close();
+                            AvailableData availableData = TorrentBBMessagesParser.Client.readResponseAvailable(channelData.getByteBuffer());
+                            piecesSelector.addAssociation(channelData.getInfoHash(), key, availableData.availableBitfield());
+                            try {
+                                this.requestPiece(channelData.getInfoHash(), key, channelData.getByteBuffer(), socketChannel);
+                            } catch (IOException e) {
                                 key.cancel();
-                            }
-                            for (Integer index : piecesLists.get(infoHashBB).getIndexesAsSet()) {
-//                                System.out.println(index);
-                                if (piecesLists.get(infoHashBB).contains(index, key) &&
-                                        !piecesLists.get(infoHashBB).isInUse(index)) {
-                                    piecesLists.get(infoHashBB).usePiece(index);
-                                    TorrentBBMessagesParser.Client.writeRequestPiece(byteBuffer, channelData.getInfoHash(), index);
-                                    try {
-                                        socketChannel.write(byteBuffer);
-                                        break;
-                                    } catch (IOException e) {
-                                        key.cancel();
-                                        piecesLists.get(infoHashBB).removeAssociation(key);
-                                    }
-                                }
+                                socketChannel.close();
+                                piecesSelector.removeAllAssociations(channelData.getInfoHash(), key);
                             }
                         }
                         case RESPONSE_PIECE -> {
                             System.out.println("RESPONSE_PIECE");
 //                            System.out.println(byteBuffer);
-                            PieceData pieceData = TorrentBBMessagesParser.Client.readResponsePiece(byteBuffer);
-                            piecesLists.get(infoHashBB).releasePiece(pieceData.index());
-                            byte[] shaSumIndex = savedFilesManager.getHash(pieceData.infoHash(), pieceData.index());
-                            if (shaSumIndex != null) {
-                                if (Arrays.equals(DigestUtils.sha1(pieceData.piece()), shaSumIndex)) {
+                            PieceData pieceData = TorrentBBMessagesParser.Client.readResponsePiece(channelData.getByteBuffer());
+//                            piecesLists.get(infoHashBB).releasePiece(pieceData.index());
+                            piecesSelector.deselectPiece(pieceData.infoHash(), pieceData.index());
+                            byte[] pieceShaSum = savedFilesManager.getHash(pieceData.infoHash(), pieceData.index());
+                            if (pieceShaSum != null) {
+                                if (Arrays.equals(DigestUtils.sha1(pieceData.piece()), pieceShaSum)) {
                                     savedFilesManager.writePiece(pieceData.infoHash(), pieceData.piece(), pieceData.index());
                                     System.out.println("SAVED PIECE " + pieceData.index());
-                                    piecesLists.get(infoHashBB).remove(pieceData.index());
+//                                    piecesLists.get(infoHashBB).remove(pieceData.index());
+                                    piecesSelector.removeAvailableIndex(pieceData.infoHash(), pieceData.index());
                                 } else {
+                                    piecesSelector.removeAssociation(pieceData.infoHash(), key, pieceData.index());
 //                                    for (int i = 0; i < 20; ++i) {
-//                                        System.out.println(shaSumIndex[i] + " " + DigestUtils.sha1(pieceData.piece())[i]);
+//                                        System.out.println(pieceShaSum[i] + " " + DigestUtils.sha1(pieceData.piece())[i]);
 //                                    }
 //                                    System.out.println(byteBuffer);
 //                                    for (byte b : pieceData.piece()) {
 //                                        System.out.print(b + " ");
 //                                    }
 //                                    System.out.println(pieceData.piece().length);
-                                    piecesLists.get(ByteBuffer.wrap(pieceData.infoHash())).removeAssociation(pieceData.index(), key);
+//                                    piecesLists.get(ByteBuffer.wrap(pieceData.infoHash())).removeAssociation(pieceData.index(), key);
                                 }
                             } else {
-                                piecesLists.get(ByteBuffer.wrap(pieceData.infoHash())).removeAssociation(pieceData.index(), key);
+//                                piecesLists.get(ByteBuffer.wrap(pieceData.infoHash())).removeAssociation(pieceData.index(), key);
+                                //??????????????????????????
+                                System.out.println("IMPOSSIBLE CLAUSE");
                             }
-                            if (piecesLists.get(ByteBuffer.wrap(channelData.getInfoHash())).getIndexesAsSet().isEmpty()) {
-                                socketChannel.close();
+//                            if (piecesLists.get(ByteBuffer.wrap(channelData.getInfoHash())).getIndexesAsSet().isEmpty()) {
+//                                socketChannel.close();
+//                                key.cancel();
+//                            }
+//                            for (Integer index : piecesLists.get(ByteBuffer.wrap(channelData.getInfoHash())).getIndexesAsSet()) {
+//                                if (piecesLists.get(ByteBuffer.wrap(channelData.getInfoHash())).contains(index, key) &&
+//                                        !piecesLists.get(infoHashBB).isInUse(index)) {
+//                                    piecesLists.get(infoHashBB).usePiece(index);
+//                                    TorrentBBMessagesParser.Client.writeRequestPiece(byteBuffer, channelData.getInfoHash(), index);
+//                                    try {
+//                                        socketChannel.write(byteBuffer);
+//                                        break;
+//                                    } catch (IOException e) {
+//                                        key.cancel();
+//                                        piecesLists.get(channelData.getInfoHash()).removeAssociation(key);
+//                                    }
+//                                }
+//                            }
+                            try {
+                                this.requestPiece(channelData.getInfoHash(), key, channelData.getByteBuffer(), socketChannel);
+                            } catch (IOException e) {
                                 key.cancel();
-                            }
-                            for (Integer index : piecesLists.get(ByteBuffer.wrap(channelData.getInfoHash())).getIndexesAsSet()) {
-                                if (piecesLists.get(ByteBuffer.wrap(channelData.getInfoHash())).contains(index, key) &&
-                                        !piecesLists.get(infoHashBB).isInUse(index)) {
-                                    piecesLists.get(infoHashBB).usePiece(index);
-                                    TorrentBBMessagesParser.Client.writeRequestPiece(byteBuffer, channelData.getInfoHash(), index);
-                                    try {
-                                        socketChannel.write(byteBuffer);
-                                        break;
-                                    } catch (IOException e) {
-                                        key.cancel();
-                                        piecesLists.get(channelData.getInfoHash()).removeAssociation(key);
-                                    }
-                                }
+                                socketChannel.close();
+                                piecesSelector.removeAllAssociations(channelData.getInfoHash(), key);
                             }
                         }
                         case HANDSHAKE -> {
-//                            System.out.println("HANDSHAKE");
-                            TorrentBBMessagesParser.Client.writeRequestAvailable(byteBuffer, channelData.getInfoHash());
-                            if (!piecesLists.containsKey(ByteBuffer.wrap(channelData.getInfoHash()))) {
-                                piecesLists.put(ByteBuffer.wrap(channelData.getInfoHash()), new PieceConnectionsList(savedFilesManager.getExistingParts(channelData.getInfoHash())));
-                            }
+                            System.out.println("HANDSHAKE");
+                            TorrentBBMessagesParser.Client.writeRequestAvailable(channelData.getByteBuffer(), channelData.getInfoHash());
+//                            if (!piecesLists.containsKey(ByteBuffer.wrap(channelData.getInfoHash()))) {
+//                                piecesLists.put(ByteBuffer.wrap(channelData.getInfoHash()), new PieceConnectionsList(savedFilesManager.getExistingParts(channelData.getInfoHash())));
+//                            }
                             try {
-                                socketChannel.write(byteBuffer);
+                                socketChannel.write(channelData.getByteBuffer());
                                 System.out.println("DATA SENT");
                             } catch (IOException e) {
                                 key.cancel();
+                                socketChannel.close();
                             }
                         }
-                        case UNKNOWN -> {
-                            System.out.println("UNKNOWN");
-
-                        }
+                        case UNKNOWN -> System.out.println("UNKNOWN");
                     }
                 }
             }
         }
     }
+
+    public void kill() {
+        if (killed) {
+            return;
+        }
+        try {
+            for (SelectionKey key : channelsSelector.keys()) {
+                key.channel().close();
+            }
+            channelsSelector.close();
+        } catch (IOException ignored) {
+        }
+        killed = true;
+    }
+
+    private void requestPiece(ByteBuffer infoHash, SelectionKey key, ByteBuffer byteBuffer, SocketChannel socketChannel) throws IOException {
+        int pieceIndex = piecesSelector.selectPiece(infoHash, key);
+        TorrentBBMessagesParser.Client.writeRequestPiece(byteBuffer, infoHash, pieceIndex);
+        socketChannel.write(byteBuffer);
+    }
+}
+
+
+
+
+
+
 
 //                if (key.isWritable()) {
 //                    SocketChannel socketChannel = (SocketChannel) key.channel();
@@ -337,48 +386,3 @@ public class Client {
 //                        }
 //                    }
 //                }
-
-
-    public void newDownload(ArrayList<String> ipWithPortList, byte[] infoHash) throws KilledException {
-        if (killed) {
-            throw new KilledException("Killed");
-        }
-        for (String ipPort : ipWithPortList) {
-//            if (channelsIpToKey.containsKey(ipPort)) {
-//                ((ConcurrentLinkedQueue<ChannelData>) channelsIpToKey.get(ipPort).attachment()).add(new ChannelData(infoHash, false));
-//            } else {
-            List<String> bufList = Splitter.on(':').splitToList(ipPort);
-            if (bufList.size() != 2) {
-                continue;
-            }
-            String ip = bufList.get(0);
-            int port = Integer.parseInt(bufList.get(1));
-            try {
-                SocketChannel socketChannel = SocketChannel.open(new InetSocketAddress(ip, port));
-                socketChannel.configureBlocking(false);
-//                ConcurrentLinkedQueue<ChannelData> dataQueue = new ConcurrentLinkedQueue<>();
-//                dataQueue.add(new ChannelData(infoHash, false));
-                SelectionKey key = socketChannel.register(selector, SelectionKey.OP_WRITE | SelectionKey.OP_READ, new ChannelData(infoHash, false));
-                System.out.println("KEY REGISTERED");
-//                channelsIpToKey.put(ipPort, key);
-            } catch (IOException ignore) {
-            }
-//            }
-        }
-    }
-
-    public void kill() {
-        if (killed) {
-            return;
-        }
-        try {
-            for (SelectionKey key : selector.keys()) {
-                key.channel().close();
-            }
-            selector.close();
-        } catch (IOException ignored) {
-        }
-        killed = true;
-    }
-
-}

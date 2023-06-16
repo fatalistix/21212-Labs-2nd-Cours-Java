@@ -12,7 +12,7 @@ public class TorrentCore {
     private boolean errorHappened = false;
     public TorrentCore() throws IOException {
         savedFilesManager = new SavedFilesManager();
-        client = new Client();
+        client = new Client(savedFilesManager);
         server = new Server();
     }
 
@@ -51,24 +51,31 @@ public class TorrentCore {
         } catch (Exception e) {
             throw new RecordException("Error registering download");
         }
-        if (downloader == null) {
-            downloader = new Thread(() -> {
-                try {
-                    client.startDownload(savedFilesManager);
-                } catch (IOException | KilledException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            downloader.setUncaughtExceptionHandler((t, e) -> {
-                errorHappened = true;
-            });
-            downloader.start();
-        }
+//        if (downloader == null) {
+//            downloader = new Thread(() -> {
+//                try {
+//                    client.startDownload();
+//                } catch (IOException | KilledException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//            downloader.setUncaughtExceptionHandler((t, e) -> {
+//                errorHappened = true;
+//            });
+//            downloader.start();
+//        }
         try {
             client.newDownload(ipWithPorts, torrentFileData.getInfoHash());
         } catch (KilledException e) {
             throw new CoreException(e);
         }
+        try {
+            client.startDownload();
+        } catch (Exception e) {
+            System.out.println("EXCEPTION: " + e.getMessage());
+            e.printStackTrace();
+        }
+
     }
 
     public void stopServer() throws CoreException {

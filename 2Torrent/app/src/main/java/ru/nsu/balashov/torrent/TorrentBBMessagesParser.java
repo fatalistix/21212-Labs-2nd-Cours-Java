@@ -2,7 +2,9 @@ package ru.nsu.balashov.torrent;
 
 import com.google.common.primitives.Ints;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 
 public class TorrentBBMessagesParser {
     public static enum MessageType {
@@ -24,8 +26,20 @@ public class TorrentBBMessagesParser {
         }
     }
 
-    public static MessageType readMessageType(ByteBuffer byteBuffer) {
+    public static void readAllMessageBytes(ByteBuffer byteBuffer, SocketChannel socketChannel) throws IOException {
         byteBuffer.clear();
+        int readBytes = socketChannel.read(byteBuffer);
+        ByteBuffer readCopyBuffer = byteBuffer.asReadOnlyBuffer();
+        readCopyBuffer.clear();
+        int targetReadBytes = readCopyBuffer.getInt();
+        while (readBytes < targetReadBytes) {
+            readBytes += socketChannel.read(byteBuffer);
+        }
+        byteBuffer.flip();
+        byteBuffer.getInt();
+    }
+
+    public static MessageType readMessageType(ByteBuffer byteBuffer) {
         byte messageCode = byteBuffer.get();
         for (MessageType type : MessageType.values()) {
             if (type.getMessageCode() == messageCode) {
@@ -36,29 +50,35 @@ public class TorrentBBMessagesParser {
     }
     public static void writeRequestCancel(ByteBuffer byteBuffer) {
         byteBuffer.clear();
+        byteBuffer.putInt(Integer.BYTES + Byte.BYTES);
         byteBuffer.put(MessageType.REQUEST_CANCEL.getMessageCode());
         byteBuffer.flip();
     }
     public static void writeUnknown(ByteBuffer byteBuffer) {
         byteBuffer.clear();
+        byteBuffer.putInt(Integer.BYTES + Byte.BYTES);
         byteBuffer.put(MessageType.UNKNOWN.getMessageCode());
         byteBuffer.flip();
     }
     public static void writeHandshake(ByteBuffer byteBuffer) {
         byteBuffer.clear();
+        byteBuffer.putInt(Integer.BYTES + Byte.BYTES);
         byteBuffer.put(MessageType.HANDSHAKE.getMessageCode());
         byteBuffer.flip();
     }
 
     public static class Client {
-        public static record AvailableData(byte[] infoHash, byte[] availableBitfield) {}
-        public static record PieceData(byte[] infoHash, byte[] piece, int index) {}
+        public record AvailableData(ByteBuffer infoHash, byte[] availableBitfield) {}
+        public record PieceData(ByteBuffer infoHash, byte[] piece, int index) {}
         private Client() {}
-        public static void writeRequestAvailable(ByteBuffer byteBuffer, byte[] infoHash) {
+        public static void writeRequestAvailable(ByteBuffer byteBuffer, ByteBuffer infoHash) {
             byteBuffer.clear();
+            infoHash.clear();
+            byteBuffer.putInt(Integer.BYTES + Byte.BYTES + infoHash.limit());
             byteBuffer.put(MessageType.REQUEST_AVAILABLE.getMessageCode());
             byteBuffer.put(infoHash);
             byteBuffer.flip();
+            infoHash.flip();
         }
         public static AvailableData readResponseAvailable(ByteBuffer byteBuffer) {
             byte[] infoHash = new byte[20];
@@ -66,14 +86,17 @@ public class TorrentBBMessagesParser {
             byteBuffer.get(infoHash).get(bitfieldLengthBuffer);
             byte[] bitfield = new byte[Ints.fromByteArray(bitfieldLengthBuffer)];
             byteBuffer.get(bitfield);
-            return new AvailableData(infoHash, bitfield);
+            return new AvailableData(ByteBuffer.wrap(infoHash), bitfield);
         }
-        public static void writeRequestPiece(ByteBuffer byteBuffer, byte[] infoHash, int index) {
+        public static void writeRequestPiece(ByteBuffer byteBuffer, ByteBuffer infoHash, int index) {
             byteBuffer.clear();
+            infoHash.clear();
+            byteBuffer.putInt(Integer.BYTES + Byte.BYTES + infoHash.limit() + Integer.BYTES);
             byteBuffer.put(MessageType.REQUEST_PIECE.getMessageCode());
             byteBuffer.put(infoHash);
             byteBuffer.put(Ints.toByteArray(index));
             byteBuffer.flip();
+            infoHash.flip();
         }
         public static PieceData readResponsePiece(ByteBuffer byteBuffer) {
             byte[] infoHash = new byte[20];
@@ -82,40 +105,46 @@ public class TorrentBBMessagesParser {
             int pieceLength = Ints.fromByteArray(intBuf);
             byte[] piece = new byte[pieceLength];
             byteBuffer.get(piece).get(intBuf);
-            return new PieceData(infoHash, piece, Ints.fromByteArray(intBuf));
+            return new PieceData(ByteBuffer.wrap(infoHash), piece, Ints.fromByteArray(intBuf));
         }
     }
 
     public static class Server {
-        public static record PieceData(byte[] infoHash, int index) {}
+        public record PieceData(ByteBuffer infoHash, int index) {}
         private Server() {}
-        public static byte[] readRequestAvailable(ByteBuffer byteBuffer) {
+        public static ByteBuffer readRequestAvailable(ByteBuffer byteBuffer) {
             byte[] infoHash = new byte[20];
             byteBuffer.get(infoHash);
-            return infoHash;
+            return ByteBuffer.wrap(infoHash);
         }
-        public static void writeResponseAvailable(ByteBuffer byteBuffer, byte[] infoHash, byte[] availableBitfield) {
+        public static void writeResponseAvailable(ByteBuffer byteBuffer, ByteBuffer infoHash, byte[] availableBitfield) {
             byteBuffer.clear();
+            infoHash.clear();
+            byteBuffer.putInt(Integer.BYTES + Byte.BYTES + infoHash.limit() + Integer.BYTES + availableBitfield.length);
             byteBuffer.put(MessageType.RESPONSE_AVAILABLE.getMessageCode());
             byteBuffer.put(infoHash);
             byteBuffer.put(Ints.toByteArray(availableBitfield.length));
             byteBuffer.put(availableBitfield);
             byteBuffer.flip();
+            infoHash.flip();
         }
         public static PieceData readRequestPiece(ByteBuffer byteBuffer) {
             byte[] infoHash = new byte[20];
             byte[] indexBuf = new byte[Ints.BYTES];
             byteBuffer.get(infoHash).get(indexBuf);
-            return new PieceData(infoHash, Ints.fromByteArray(indexBuf));
+            return new PieceData(ByteBuffer.wrap(infoHash), Ints.fromByteArray(indexBuf));
         }
-        public static void writeResponsePiece(ByteBuffer byteBuffer, byte[] infoHash, byte[] piece, int index) {
+        public static void writeResponsePiece(ByteBuffer byteBuffer, ByteBuffer infoHash, byte[] piece, int index) {
             byteBuffer.clear();
+            infoHash.clear();
+            byteBuffer.putInt(Integer.BYTES + Byte.BYTES + infoHash.limit() + Integer.BYTES + piece.length + Integer.BYTES);
             byteBuffer.put(MessageType.RESPONSE_PIECE.getMessageCode());
             byteBuffer.put(infoHash);
             byteBuffer.put(Ints.toByteArray(piece.length));
             byteBuffer.put(piece);
             byteBuffer.put(Ints.toByteArray(index));
             byteBuffer.flip();
+            infoHash.flip();
         }
     }
 }

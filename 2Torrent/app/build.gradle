@@ -12,7 +12,7 @@ plugins {
     id 'application'
 }
 
-group 'ru.nsu.balashov'
+group 'ru.nsu.balashov.torrent'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -20,21 +20,27 @@ repositories {
     mavenCentral()
 }
 
+//jar {
+//    manifest {
+//        attributes 'Main-Class': application.mainClass
+//    }
+//}
+
 dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
 
-    // This dependency is used by the application.
-    implementation 'com.google.guava:guava:31.1-jre'
+    // https://mvnrepository.com/artifact/com.google.guava/guava
+    implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
 
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
-    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
 
     // https://mvnrepository.com/artifact/commons-codec/commons-codec
-    implementation 'commons-codec:commons-codec:1.15'
+    implementation group: 'commons-codec', name: 'commons-codec', version: '1.15'
 
     // https://mvnrepository.com/artifact/com.dampcake/bencode
-    implementation 'com.dampcake:bencode:1.4'
+    implementation group: 'com.dampcake', name: 'bencode', version: '1.4'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -44,10 +50,12 @@ java {
     }
 }
 
+
+
 application {
     // Define the main class for the application.
-    mainClass = 'ru.nsu.torrent.App'
-    mainModule = 'ru.nsu.balashov.torrent'
+    mainClass = 'ru.nsu.balashov.torrent.App'
+//    mainModule = 'ru.nsu.balashov.torrent'
 }
 
 tasks.register('copyResources', Copy) {
@@ -59,4 +67,14 @@ tasks.register('copyResources', Copy) {
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+}
+
+run {
+    standardInput = System.in;
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': application.mainClass
+    }
 }

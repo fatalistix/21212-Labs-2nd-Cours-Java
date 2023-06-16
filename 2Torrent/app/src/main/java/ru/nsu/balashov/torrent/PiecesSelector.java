@@ -10,13 +10,13 @@ class OneHashPiecesSelector {
     private final HashSet<PieceWithKeys> piecesInUse     = new HashSet<>();
     private final HashSet<PieceWithKeys> availablePieces = new HashSet<>();
 
-    public OneHashPiecesSelector(byte[] bitfieldDownloaded) {
+    public OneHashPiecesSelector(byte[] bitfieldDownloaded, int numOfPieces) {
         for (int i = 0; i < bitfieldDownloaded.length; ++i) {
             if (bitfieldDownloaded[i] == -1) { //? MAX UNSIGNED BYTE VALUE
                 continue;
             }
             for (int j = 0; j < Byte.SIZE; ++j) {
-                if (((bitfieldDownloaded[i] >> (7 - j)) & 1) == 0) {
+                if (i * Byte.SIZE + j < numOfPieces && ((bitfieldDownloaded[i] >> (7 - j)) & 1) == 0) {
                     availablePieces.add(new PieceWithKeys(i * Byte.SIZE + j));
                 }
             }
@@ -101,8 +101,8 @@ public class PiecesSelector {
 
     public PiecesSelector() {}
 
-    public void register(ByteBuffer infoHash, byte[] downloadedBitfield) {
-        hashToSelectorHM.put(infoHash, new OneHashPiecesSelector(downloadedBitfield));
+    public void register(ByteBuffer infoHash, byte[] downloadedBitfield, int numOfPieces) {
+        hashToSelectorHM.put(infoHash, new OneHashPiecesSelector(downloadedBitfield, numOfPieces));
     }
     public void unregister(ByteBuffer infoHash) {
         hashToSelectorHM.remove(infoHash);
