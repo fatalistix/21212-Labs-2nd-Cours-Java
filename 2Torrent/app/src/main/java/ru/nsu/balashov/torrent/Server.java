@@ -71,43 +71,35 @@ public class Server {
                         }
                     }
                     if (key.isReadable()) {
-//                        System.out.println("READ");
                         SocketChannel socketChannel = (SocketChannel) key.channel();
                         ByteBuffer byteBuffer = (ByteBuffer) key.attachment();
                         byteBuffer.clear();
                         try {
-                            TorrentBBMessagesParser.readAllMessageBytes(byteBuffer, socketChannel);
-
+                            int readBytes = TorrentBBMessagesParser.readAllMessageBytes(byteBuffer, socketChannel);
+                            if (readBytes == -1) {
+                                key.cancel();
+                                socketChannel.close();
+                                break;
+                            }
                             switch (TorrentBBMessagesParser.readMessageType(byteBuffer)) {
                                 case REQUEST_AVAILABLE -> {
-//                                    System.out.println("REQUEST_AVAILABLE");
                                     ByteBuffer infoHash = TorrentBBMessagesParser.Server.readRequestAvailable(byteBuffer);
                                     byte[] bitmask = savedFilesManager.getExistingParts(infoHash);
                                     if (bitmask == null) {
                                         TorrentBBMessagesParser.writeUnknown(byteBuffer);
                                     } else {
                                         TorrentBBMessagesParser.Server.writeResponseAvailable(byteBuffer, infoHash, bitmask);
-//                                        System.out.println("RESPONSED");
                                     }
                                     socketChannel.write(byteBuffer);
-//                                    System.out.println("WROTE");
                                 }
                                 case REQUEST_PIECE -> {
-//                                    System.out.println("REQUEST_PIECE");
                                     PieceData pieceData = TorrentBBMessagesParser.Server.readRequestPiece(byteBuffer);
                                     byte[] piece = savedFilesManager.getPiece(pieceData.infoHash(), pieceData.index());
-//                                    for (byte b : pieceData.infoHash()) {
-//                                        System.out.print(b + " ");
-//                                    }
-//                                    System.out.println();
 
                                     if (piece == null) {
                                         TorrentBBMessagesParser.writeUnknown(byteBuffer);
                                     } else {
-//                                        System.out.println("WRITE USEFUL");
-//                                        System.out.println(byteBuffer);
                                         TorrentBBMessagesParser.Server.writeResponsePiece(byteBuffer, pieceData.infoHash(), piece, pieceData.index());
-//                                        System.out.println(byteBuffer);
                                     }
                                     socketChannel.write(byteBuffer);
                                 }
@@ -117,9 +109,10 @@ public class Server {
                                 }
                                 case UNKNOWN -> {}
                             }
-                        } catch (IOException ignore) {
+                        } catch (IOException e) {
                             System.out.println("KEY CANCELED");
                             key.cancel();
+                            socketChannel.close();
                         }
                     }
                 }

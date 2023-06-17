@@ -7,8 +7,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 class OneHashPiecesSelector {
-    private final HashSet<PieceWithKeys> piecesInUse     = new HashSet<>();
+//    private final HashSet<PieceWithKeys> piecesInUse     = new HashSet<>();
     private final HashSet<PieceWithKeys> availablePieces = new HashSet<>();
+    private final HashMap<SelectionKey, PieceWithKeys> keyToPieceInUse = new HashMap<>();
 
     public OneHashPiecesSelector(byte[] bitfieldDownloaded, int numOfPieces) {
         for (int i = 0; i < bitfieldDownloaded.length; ++i) {
@@ -33,7 +34,7 @@ class OneHashPiecesSelector {
                 piece.addAssociation(key);
             }
         }
-        for (PieceWithKeys piece : piecesInUse) {
+        for (PieceWithKeys piece : keyToPieceInUse.values()) {
             if (bitfieldIndexTrue(bitfield, piece.getIndex())) {
                 piece.addAssociation(key);
             }
@@ -45,7 +46,7 @@ class OneHashPiecesSelector {
         while (iter.hasNext()) {
             PieceWithKeys piece = iter.next();
             if (piece.haveAssociation(key)) {
-                piecesInUse.add(piece);
+                keyToPieceInUse.put(key, piece);
                 iter.remove();
                 return piece.getIndex();
             }
@@ -53,26 +54,24 @@ class OneHashPiecesSelector {
         return -1;
     }
 
-    public void deselect(int index) {
-        Iterator<PieceWithKeys> iter = piecesInUse.iterator();
-        while (iter.hasNext()) {
-            PieceWithKeys piece = iter.next();
-            if (piece.getIndex() == index) {
-                availablePieces.add(piece);
-                iter.remove();
-                return;
+    public void deselect(SelectionKey key, boolean success) {
+        if (keyToPieceInUse.containsKey(key)) {
+            if (!success) {
+                keyToPieceInUse.get(key).removeAssociation(key);
+                availablePieces.add(keyToPieceInUse.get(key));
             }
+            keyToPieceInUse.remove(key);
         }
     }
 
-    public void removeAssociation(SelectionKey key, int index) {
-        for (PieceWithKeys piece : availablePieces) {
-            if (piece.getIndex() == index && piece.haveAssociation(key)) {
-                piece.removeAssociation(key);
-                return;
-            }
-        }
-    }
+//    public void removeAssociation(SelectionKey key, int index) {
+//        for (PieceWithKeys piece : availablePieces) {
+//            if (piece.getIndex() == index && piece.haveAssociation(key)) {
+//                piece.removeAssociation(key);
+//                return;
+//            }
+//        }
+//    }
 
     public void removeAllAssociations(SelectionKey key) {
         for (PieceWithKeys piece : availablePieces) {
@@ -80,18 +79,28 @@ class OneHashPiecesSelector {
                 piece.removeAssociation(key);
             }
         }
-    }
-
-    public void removeAvailableIndex(int index) {
-        Iterator<PieceWithKeys> iter = availablePieces.iterator();
-        while (iter.hasNext()) {
-            PieceWithKeys piece = iter.next();
-            if (piece.getIndex() == index) {
-                iter.remove();
-                return;
+        keyToPieceInUse.remove(key);
+        for (PieceWithKeys piece : keyToPieceInUse.values()) {
+            if (piece.haveAssociation(key)) {
+                piece.removeAssociation(key);
             }
         }
     }
+
+    public boolean havePieces() {
+        return !availablePieces.isEmpty() || !keyToPieceInUse.isEmpty();
+    }
+
+//    public void removeAvailableIndex(int index) {
+//        Iterator<PieceWithKeys> iter = availablePieces.iterator();
+//        while (iter.hasNext()) {
+//            PieceWithKeys piece = iter.next();
+//            if (piece.getIndex() == index) {
+//                iter.remove();
+//                return;
+//            }
+//        }
+//    }
 }
 
 
@@ -113,9 +122,14 @@ public class PiecesSelector {
         }
         return -1;
     }
-    public void deselectPiece(ByteBuffer infoHash, int index) {
+//    public void deselectPiece(ByteBuffer infoHash, int index) {
+//        if (hashToSelectorHM.containsKey(infoHash)) {
+//            hashToSelectorHM.get(infoHash).deselect(index);
+//        }
+//    }
+    public void deselectPiece(ByteBuffer infoHash, SelectionKey key, boolean success) {
         if (hashToSelectorHM.containsKey(infoHash)) {
-            hashToSelectorHM.get(infoHash).deselect(index);
+            hashToSelectorHM.get(infoHash).deselect(key, success);
         }
     }
     public void addAssociation(ByteBuffer infoHash, SelectionKey key, byte[] bitfield) {
@@ -123,11 +137,11 @@ public class PiecesSelector {
             hashToSelectorHM.get(infoHash).addAssociation(key, bitfield);
         }
     }
-    public void removeAssociation(ByteBuffer infoHash, SelectionKey key, int index) {
-        if (hashToSelectorHM.containsKey(infoHash)) {
-            hashToSelectorHM.get(infoHash).removeAssociation(key, index);
-        }
-    }
+//    public void removeAssociation(ByteBuffer infoHash, SelectionKey key, int index) {
+//        if (hashToSelectorHM.containsKey(infoHash)) {
+//            hashToSelectorHM.get(infoHash).removeAssociation(key, index);
+//        }
+//    }
 
     public void removeAllAssociations(ByteBuffer infoHash, SelectionKey key) {
         if (hashToSelectorHM.containsKey(infoHash)) {
@@ -135,9 +149,16 @@ public class PiecesSelector {
         }
     }
 
-    public void removeAvailableIndex(ByteBuffer infoHash, int index) {
+    public boolean havePieces(ByteBuffer infoHash) {
         if (hashToSelectorHM.containsKey(infoHash)) {
-            hashToSelectorHM.get(infoHash).removeAvailableIndex(index);
+            hashToSelectorHM.get(infoHash).havePieces();
         }
+        return false;
     }
+
+//    public void removeAvailableIndex(ByteBuffer infoHash, int index) {
+//        if (hashToSelectorHM.containsKey(infoHash)) {
+//            hashToSelectorHM.get(infoHash).removeAvailableIndex(index);
+//        }
+//    }
 }

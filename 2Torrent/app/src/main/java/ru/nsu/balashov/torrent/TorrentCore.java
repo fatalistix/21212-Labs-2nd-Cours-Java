@@ -29,6 +29,7 @@ public class TorrentCore {
         });
         uploadListener.setUncaughtExceptionHandler((t, e) -> {
             errorHappened = true;
+            e.printStackTrace();
         });
         uploadListener.start();
 //        try {
@@ -61,9 +62,10 @@ public class TorrentCore {
 //            });
 //            downloader.setUncaughtExceptionHandler((t, e) -> {
 //                errorHappened = true;
+//                e.printStackTrace();
 //            });
-//            downloader.start();
 //        }
+//        downloader.start();
         try {
             client.newDownload(ipWithPorts, torrentFileData.getInfoHash());
         } catch (KilledException e) {
@@ -75,7 +77,6 @@ public class TorrentCore {
             System.out.println("EXCEPTION: " + e.getMessage());
             e.printStackTrace();
         }
-
     }
 
     public void stopServer() throws CoreException {

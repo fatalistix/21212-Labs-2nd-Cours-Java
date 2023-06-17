@@ -8,7 +8,7 @@ import java.util.Arrays;
 public class FileWrapper implements AutoCloseable{
     private final RandomAccessFile file;
 //    private byte[] bitfield;
-//    private final int fileLength;
+    private final long fileLength;
     private final int pieceLength;
     private final Object monitor = this;
 
@@ -20,6 +20,7 @@ public class FileWrapper implements AutoCloseable{
         }
 //        this.fileLength = fileLength;
         this.pieceLength = pieceLength;
+        this.fileLength = fileLength;
 //        int numOfPieces = fileLength / pieceLength + ((fileLength % pieceLength == 0) ? 0 : 1);
 //        this.bitfield = new byte[numOfPieces / Byte.SIZE
 //                + ((numOfPieces % Byte.SIZE == 0) ? 0 : 1)];
@@ -56,39 +57,32 @@ public class FileWrapper implements AutoCloseable{
     }
 
     public void writePiece(byte[] piece, int index) throws IOException {
+        if ((long) index * pieceLength > fileLength) {
+            throw new IOException("Index out of file length");
+        }
         synchronized (monitor) {
             file.seek((long) index * pieceLength);
             file.write(piece);
         }
-//        bitfield[index / 8] |= (1 << (7 - (index % 8)));
     }
 
-//    public byte[] getBitfieldCopy() {
-//        synchronized (monitor) {
-//            return bitfield.clone();
-//        }
-//    }
-
     public byte[] readPiece(int index) throws IOException {
+        if ((long) index * pieceLength > fileLength) {
+            throw new IOException("Index out of file length");
+        }
         byte[] buffer = new byte[pieceLength];
         int readBytes;
         synchronized (monitor) {
             file.seek((long) index * pieceLength);
-//            System.out.println("<=============================>");
-//            System.out.println(index * pieceLength);
-//            System.out.println(pieceLength);
-//            System.out.println("<=============================>");
             readBytes = file.read(buffer);
         }
-        byte[] buf = Arrays.copyOf(buffer, readBytes);
-//        for (byte b : buf) {
-//            System.out.print(b + " ");
-//        }
-//        System.out.println();
-        return buf;
+        return Arrays.copyOf(buffer, readBytes);
     }
 
     public int readPiece(byte[] array, int index) throws IOException {
+        if ((long) index * pieceLength > fileLength) {
+            throw new IOException("Index out of file length");
+        }
         synchronized (monitor) {
             file.seek((long) index * pieceLength);
             return file.read(array);
@@ -96,6 +90,9 @@ public class FileWrapper implements AutoCloseable{
     }
 
     public ArrayList<byte[]> readNPieces(int startIndex, int numToRead) throws IOException {
+        if (((long) startIndex + numToRead) * pieceLength > fileLength) {
+            throw new IOException("Index out of file length");
+        }
         byte[] buffer = new byte[pieceLength * numToRead];
         int readBytes;
         ArrayList<byte[]> pieces = new ArrayList<>(numToRead);

@@ -17,8 +17,6 @@ public class Client {
     private final Selector channelsSelector;
     private final static int DEFAULT_BUFFER_SIZE = 2 * 1024 * 1024;
     private int byteBufferSize = DEFAULT_BUFFER_SIZE;
-    //    private final HashMap<String, SelectionKey> channelsIpToKey = new HashMap<>();
-//    private final HashMap<ByteBuffer, PieceConnectionsList> piecesLists = new HashMap<>();
     private final PiecesSelector piecesSelector = new PiecesSelector();
     private final SavedFilesManager savedFilesManager;
     private boolean killed = false;
@@ -76,22 +74,39 @@ public class Client {
                     ChannelData channelData = (ChannelData) key.attachment();
                     channelData.getByteBuffer().clear();
                     try {
-                        TorrentBBMessagesParser.readAllMessageBytes(channelData.getByteBuffer(), socketChannel);
-//                        System.out.println(byteBuffer);
+                        int readBytes = TorrentBBMessagesParser.readAllMessageBytes(channelData.getByteBuffer(), socketChannel);
+                        if (readBytes == -1) {
+                            socketChannel.close();
+                            key.cancel();
+                            piecesSelector.removeAllAssociations(channelData.getInfoHash(), key);
+                            break;
+                        }
                         System.out.println("READ");
                     } catch (IOException e) {
                         key.cancel();
                         socketChannel.close();
-//                        piecesLists.get(ByteBuffer.wrap(channelData.getInfoHash())).removeAssociation(key);
                         piecesSelector.removeAllAssociations(channelData.getInfoHash(), key);
+                        break;
                     }
                     switch (TorrentBBMessagesParser.readMessageType(channelData.getByteBuffer())) {
                         case RESPONSE_AVAILABLE -> {
                             System.out.println("RESPONSE_AVAILABLE");
                             AvailableData availableData = TorrentBBMessagesParser.Client.readResponseAvailable(channelData.getByteBuffer());
-                            piecesSelector.addAssociation(channelData.getInfoHash(), key, availableData.availableBitfield());
+                            piecesSelector.addAssociation(availableData.infoHash(), key, availableData.availableBitfield());
+                            int pieceIndex = piecesSelector.selectPiece(channelData.getInfoHash(), key);
+                            if (pieceIndex == -1) {
+                                System.out.println("NOTHING TO DOWNLOAD");
+                                key.cancel();
+                                socketChannel.close();
+                                if (!piecesSelector.havePieces(channelData.getInfoHash())) {
+                                    piecesSelector.unregister(channelData.getInfoHash());
+                                }
+                                break;
+                            }
+                            TorrentBBMessagesParser.Client.writeRequestPiece(channelData.getByteBuffer(),
+                                    channelData.getInfoHash(), pieceIndex);
                             try {
-                                this.requestPiece(channelData.getInfoHash(), key, channelData.getByteBuffer(), socketChannel);
+                                socketChannel.write(channelData.getByteBuffer());
                             } catch (IOException e) {
                                 key.cancel();
                                 socketChannel.close();
@@ -100,33 +115,26 @@ public class Client {
                         }
                         case RESPONSE_PIECE -> {
                             System.out.println("RESPONSE_PIECE");
-//                            System.out.println(byteBuffer);
                             PieceData pieceData = TorrentBBMessagesParser.Client.readResponsePiece(channelData.getByteBuffer());
-//                            piecesLists.get(infoHashBB).releasePiece(pieceData.index());
-                            piecesSelector.deselectPiece(pieceData.infoHash(), pieceData.index());
                             byte[] pieceShaSum = savedFilesManager.getHash(pieceData.infoHash(), pieceData.index());
                             if (pieceShaSum != null) {
                                 if (Arrays.equals(DigestUtils.sha1(pieceData.piece()), pieceShaSum)) {
-                                    savedFilesManager.writePiece(pieceData.infoHash(), pieceData.piece(), pieceData.index());
+                                    try {
+                                        savedFilesManager.writePiece(pieceData.infoHash(), pieceData.piece(), pieceData.index());
+                                    } catch (IOException e) {
+                                        piecesSelector.deselectPiece(pieceData.infoHash(), key, false);
+                                        break;
+                                    }
                                     System.out.println("SAVED PIECE " + pieceData.index());
-//                                    piecesLists.get(infoHashBB).remove(pieceData.index());
-                                    piecesSelector.removeAvailableIndex(pieceData.infoHash(), pieceData.index());
+                                    piecesSelector.deselectPiece(pieceData.infoHash(), key, true);
                                 } else {
-                                    piecesSelector.removeAssociation(pieceData.infoHash(), key, pieceData.index());
-//                                    for (int i = 0; i < 20; ++i) {
-//                                        System.out.println(pieceShaSum[i] + " " + DigestUtils.sha1(pieceData.piece())[i]);
-//                                    }
-//                                    System.out.println(byteBuffer);
-//                                    for (byte b : pieceData.piece()) {
-//                                        System.out.print(b + " ");
-//                                    }
-//                                    System.out.println(pieceData.piece().length);
-//                                    piecesLists.get(ByteBuffer.wrap(pieceData.infoHash())).removeAssociation(pieceData.index(), key);
+                                    piecesSelector.deselectPiece(pieceData.infoHash(), key, false);
                                 }
                             } else {
 //                                piecesLists.get(ByteBuffer.wrap(pieceData.infoHash())).removeAssociation(pieceData.index(), key);
                                 //??????????????????????????
                                 System.out.println("IMPOSSIBLE CLAUSE");
+                                piecesSelector.deselectPiece(pieceData.infoHash(), key, false);
                             }
 //                            if (piecesLists.get(ByteBuffer.wrap(channelData.getInfoHash())).getIndexesAsSet().isEmpty()) {
 //                                socketChannel.close();
@@ -146,8 +154,20 @@ public class Client {
 //                                    }
 //                                }
 //                            }
+                            int pieceIndex = piecesSelector.selectPiece(channelData.getInfoHash(), key);
+                            if (pieceIndex == -1) {
+                                System.out.println("NOTHING TO DOWNLOAD");
+                                key.cancel();
+                                socketChannel.close();
+                                if (!piecesSelector.havePieces(channelData.getInfoHash())) {
+                                    piecesSelector.unregister(channelData.getInfoHash());
+                                }
+                                break;
+                            }
+                            TorrentBBMessagesParser.Client.writeRequestPiece(channelData.getByteBuffer(),
+                                    channelData.getInfoHash(), pieceIndex);
                             try {
-                                this.requestPiece(channelData.getInfoHash(), key, channelData.getByteBuffer(), socketChannel);
+                                socketChannel.write(channelData.getByteBuffer());
                             } catch (IOException e) {
                                 key.cancel();
                                 socketChannel.close();
@@ -157,9 +177,6 @@ public class Client {
                         case HANDSHAKE -> {
                             System.out.println("HANDSHAKE");
                             TorrentBBMessagesParser.Client.writeRequestAvailable(channelData.getByteBuffer(), channelData.getInfoHash());
-//                            if (!piecesLists.containsKey(ByteBuffer.wrap(channelData.getInfoHash()))) {
-//                                piecesLists.put(ByteBuffer.wrap(channelData.getInfoHash()), new PieceConnectionsList(savedFilesManager.getExistingParts(channelData.getInfoHash())));
-//                            }
                             try {
                                 socketChannel.write(channelData.getByteBuffer());
                                 System.out.println("DATA SENT");
@@ -168,7 +185,11 @@ public class Client {
                                 socketChannel.close();
                             }
                         }
-                        case UNKNOWN -> System.out.println("UNKNOWN");
+                        case UNKNOWN -> {
+                            System.out.println("UNKNOWN");
+                            key.cancel();
+                            socketChannel.close();
+                        }
                     }
                 }
             }
@@ -187,12 +208,6 @@ public class Client {
         } catch (IOException ignored) {
         }
         killed = true;
-    }
-
-    private void requestPiece(ByteBuffer infoHash, SelectionKey key, ByteBuffer byteBuffer, SocketChannel socketChannel) throws IOException {
-        int pieceIndex = piecesSelector.selectPiece(infoHash, key);
-        TorrentBBMessagesParser.Client.writeRequestPiece(byteBuffer, infoHash, pieceIndex);
-        socketChannel.write(byteBuffer);
     }
 }
 

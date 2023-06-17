@@ -19,10 +19,8 @@ public class SavedFilesManager {
                                               long pieceLength, byte[] infoHash) {}
     private record FileWithBitmask(FileWrapper fileWrapper, byte[] bitmask, int numOfPieces) {}
     public final static String pathToJson = System.getProperty("user.home") + "/.config/xf/Saved1.json";
-//    private final ConcurrentHashMap<ByteBuffer, SerializableDownloadedInfo> allDownloadedInfo = new ConcurrentHashMap<>();
-//    private final ConcurrentHashMap<ByteBuffer, FileWithBitmask> torrentsExistingPartsCache = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<ByteBuffer, TorrentInfo> allDownloadedInfo = new ConcurrentHashMap<>();
-    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private final Gson gson = new GsonBuilder().create();
     private final File jsonFile;
 
 
@@ -39,10 +37,6 @@ public class SavedFilesManager {
             if (mainJsonArray != null) {
                 for (JsonElement dataJe : mainJsonArray) {
                     SerializableDownloadedInfo instance = gson.fromJson(dataJe, SerializableDownloadedInfo.class);
-//                    for (byte b : instance.infoHash) {
-//                        System.out.print(b + " ");
-//                    }
-//                    System.out.println();
                     System.out.println(instance);
                     try {
                         FileWrapper fileWrapper = new FileWrapper(instance.pathToDownloaded(), (int) instance.pieceLength(), instance.singleFileLength());
@@ -101,12 +95,7 @@ public class SavedFilesManager {
         allDownloadedInfo.put(torrentFileData.getInfoHash(), new TorrentInfo(sDInfo, new FileWithBitmask(fileWrapper, existingParts, numOfPieces)));
     }
 
-    public void storeDownloaded() throws IOException {
-//        URL jsonUrl = this.getClass().getResource(pathToJson);
-//        if (jsonUrl == null) {
-//            System.out.println("STORE DOWNLOADED FAIL");
-//            throw new FileNotFoundException("Cannot open json file");
-//        }
+    public synchronized void storeDownloaded() throws IOException {
         try (Writer writer = new FileWriter(jsonFile)) {
             ArrayList<SerializableDownloadedInfo> serializableList = new ArrayList<>(allDownloadedInfo.size());
             for (TorrentInfo torrentInfo : allDownloadedInfo.values()) {
@@ -120,14 +109,6 @@ public class SavedFilesManager {
         if (!allDownloadedInfo.containsKey(infoHash)) {
             return null;
         }
-//        if (torrentsExistingPartsCache.containsKey(infoHash)) {
-//            return torrentsExistingPartsCache.get(infoHash).bitmask();
-//        } else {
-//
-//            byte[] existingParts = createExistingPartsBitmask(allDownloadedInfo.get(infoHash), );
-//            torrentsExistingPartsCache.put(infoHash, existingParts);
-//            return existingParts;
-//        }
         return allDownloadedInfo.get(infoHash).file().bitmask();
     }
 
@@ -151,7 +132,8 @@ public class SavedFilesManager {
     }
 
     public byte[] getHash(ByteBuffer infoHash, int pieceIndex) {
-        if (allDownloadedInfo.containsKey(infoHash)) {
+        if (allDownloadedInfo.containsKey(infoHash) &&
+                pieceIndex < allDownloadedInfo.get(infoHash).serializableInfo().sha1Sums().length) {
             return allDownloadedInfo.get(infoHash).serializableInfo().sha1Sums()[pieceIndex];
         }
         return null;

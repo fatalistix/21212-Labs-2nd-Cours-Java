@@ -26,17 +26,26 @@ public class TorrentBBMessagesParser {
         }
     }
 
-    public static void readAllMessageBytes(ByteBuffer byteBuffer, SocketChannel socketChannel) throws IOException {
+    public static int readAllMessageBytes(ByteBuffer byteBuffer, SocketChannel socketChannel) throws IOException {
         byteBuffer.clear();
         int readBytes = socketChannel.read(byteBuffer);
+        if (readBytes == -1) {
+            return -1;
+        }
         ByteBuffer readCopyBuffer = byteBuffer.asReadOnlyBuffer();
         readCopyBuffer.clear();
+        int alreadyReadBytes = readBytes;
         int targetReadBytes = readCopyBuffer.getInt();
-        while (readBytes < targetReadBytes) {
-            readBytes += socketChannel.read(byteBuffer);
+        while (alreadyReadBytes < targetReadBytes) {
+            readBytes = socketChannel.read(byteBuffer);
+            if (readBytes == -1) {
+                return -1;
+            }
+            alreadyReadBytes += readBytes;
         }
         byteBuffer.flip();
         byteBuffer.getInt();
+        return alreadyReadBytes;
     }
 
     public static MessageType readMessageType(ByteBuffer byteBuffer) {
