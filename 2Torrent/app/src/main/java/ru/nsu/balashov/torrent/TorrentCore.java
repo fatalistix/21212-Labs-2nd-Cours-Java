@@ -52,31 +52,31 @@ public class TorrentCore {
         } catch (Exception e) {
             throw new RecordException("Error registering download");
         }
-//        if (downloader == null) {
-//            downloader = new Thread(() -> {
-//                try {
-//                    client.startDownload();
-//                } catch (IOException | KilledException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            });
-//            downloader.setUncaughtExceptionHandler((t, e) -> {
-//                errorHappened = true;
-//                e.printStackTrace();
-//            });
-//        }
-//        downloader.start();
+        if (downloader == null) {
+            downloader = new Thread(() -> {
+                try {
+                    client.startDownload();
+                } catch (IOException | KilledException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            downloader.setUncaughtExceptionHandler((t, e) -> {
+                errorHappened = true;
+                e.printStackTrace();
+            });
+            downloader.start();
+        }
         try {
             client.newDownload(ipWithPorts, torrentFileData.getInfoHash());
         } catch (KilledException e) {
             throw new CoreException(e);
         }
-        try {
-            client.startDownload();
-        } catch (Exception e) {
-            System.out.println("EXCEPTION: " + e.getMessage());
-            e.printStackTrace();
-        }
+//        try {
+//            client.startDownload();
+//        } catch (Exception e) {
+//            System.out.println("EXCEPTION: " + e.getMessage());
+//            e.printStackTrace();
+//        }
     }
 
     public void stopServer() throws CoreException {

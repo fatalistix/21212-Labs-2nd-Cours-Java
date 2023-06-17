@@ -60,7 +60,7 @@ public class Client {
             throw new KilledException("killed");
         }
         while (true) {
-            int count = channelsSelector.select();
+            int count = channelsSelector.select(3000);
             if (count == 0) {
                 continue;
             }
