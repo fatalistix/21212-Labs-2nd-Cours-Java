@@ -21,18 +21,20 @@ public class TorrentCore {
         if (errorHappened) {
             throw new CoreException("Error happened");
         }
-        uploadListener = new Thread(() -> {
-            try {
-                server.startUploading(savedFilesManager);
-            } catch (IOException | KilledException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        uploadListener.setUncaughtExceptionHandler((t, e) -> {
-            errorHappened = true;
-            e.printStackTrace();
-        });
-        uploadListener.start();
+        if (uploadListener == null) {
+            uploadListener = new Thread(() -> {
+                try {
+                    server.startUploading(savedFilesManager);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            uploadListener.setUncaughtExceptionHandler((t, e) -> {
+                errorHappened = true;
+                e.printStackTrace();
+            });
+            uploadListener.start();
+        }
 //        try {
 //            server.startUploading(savedFilesManager);
 //        } catch (Exception e) {
@@ -53,25 +55,8 @@ public class TorrentCore {
         } catch (Exception e) {
             throw new RecordException("Error registering download");
         }
-        if (downloader == null) {
-            downloader = new Thread(() -> {
-                try {
-                    client.startDownload();
-                } catch (IOException | KilledException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            downloader.setUncaughtExceptionHandler((t, e) -> {
-                errorHappened = true;
-                e.printStackTrace();
-            });
-            downloader.start();
-        }
-        try {
-            client.newDownload(ipWithPorts, torrentFileData.getInfoHash());
-        } catch (KilledException e) {
-            throw new CoreException(e);
-        }
+        lazyDownload();
+        client.newDownload(ipWithPorts, torrentFileData.getInfoHash());
 //        try {
 //            client.startDownload();
 //        } catch (Exception e) {
@@ -91,7 +76,10 @@ public class TorrentCore {
         server.kill();
     }
 
-    public void addDownloadedTorrent(TorrentFileData torrentFileData, String pathToSave) throws RecordException {
+    public void addDownloadedTorrent(TorrentFileData torrentFileData, String pathToSave) throws RecordException, CoreException {
+        if (errorHappened) {
+            throw new CoreException("Error happened");
+        }
         if (savedFilesManager.exists(torrentFileData)) {
             throw new RecordException("Already exists");
         }
@@ -121,15 +109,29 @@ public class TorrentCore {
         return savedFilesManager.getNotCompleteDownloadedList();
     }
 
-    public void resumeDownloading(ByteBuffer infoHash, ArrayList<String> ipWithPort) throws CoreException {
-        try {
-            if (client.isDownloading(infoHash)) {
-                client.addSources(infoHash, ipWithPort);
-            } else {
-                client.newDownload(ipWithPort, infoHash);
-            }
-        } catch (KilledException e) {
-            throw new CoreException(e);
+    public void resumeDownloading(ByteBuffer infoHash, ArrayList<String> ipWithPort) {
+        lazyDownload();
+        if (client.isDownloading(infoHash)) {
+            client.addSources(infoHash, ipWithPort);
+        } else {
+            client.newDownload(ipWithPort, infoHash);
+        }
+    }
+
+    private void lazyDownload() {
+        if (downloader == null) {
+            downloader = new Thread(() -> {
+                try {
+                    client.startDownload();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            downloader.setUncaughtExceptionHandler((t, e) -> {
+                errorHappened = true;
+//                e.printStackTrace();
+            });
+            downloader.start();
         }
     }
 

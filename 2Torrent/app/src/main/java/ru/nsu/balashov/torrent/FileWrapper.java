@@ -45,6 +45,7 @@ public class FileWrapper implements AutoCloseable {
             file.seek((long) index * pieceLength);
             file.write(piece);
             ++currentlyAvailablePieces;
+            bitmask[index / Byte.SIZE] |= (1 << (7 - (index % 8)));
         }
     }
 

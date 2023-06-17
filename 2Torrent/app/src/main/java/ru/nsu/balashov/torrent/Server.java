@@ -17,11 +17,10 @@ import java.util.Iterator;
 
 public class Server {
     private final Selector selector;
-    private final static int DEFAULT_LISTENING_PORT = 6969;
+    private final static int DEFAULT_LISTENING_PORT = 6967;
     private final static int DEFAULT_BUFFER_SIZE = 2 * 1024 * 1024;
     private int byteBufferSize = DEFAULT_BUFFER_SIZE;
     private int listeningPort = DEFAULT_LISTENING_PORT;
-    private boolean killed = false;
 
     public Server() throws IOException {
         this.selector = Selector.open();
@@ -38,10 +37,7 @@ public class Server {
         this.listeningPort = portNumber;
     }
 
-    public void startUploading(SavedFilesManager savedFilesManager) throws IOException, KilledException {
-        if (killed) {
-            throw new KilledException("Server already killed");
-        }
+    public void startUploading(SavedFilesManager savedFilesManager) throws IOException {
         try (ServerSocketChannel serverSocketChannel = ServerSocketChannel.open(StandardProtocolFamily.INET)) {
             serverSocketChannel.configureBlocking(false);
             InetSocketAddress inetSocketAddress = new InetSocketAddress(listeningPort);
@@ -50,6 +46,9 @@ public class Server {
 
             while (true) {
                 int count = selector.select();
+                if (Thread.interrupted()) {
+                    throw new InterruptedException();
+                }
                 if (count == 0) {
                     continue;
                 }
@@ -117,13 +116,11 @@ public class Server {
                     }
                 }
             }
+        } catch (InterruptedException ignore) {
         }
     }
 
     public void kill() {
-        if (killed) {
-            return;
-        }
         try {
             for (SelectionKey key : selector.keys()) {
                 key.channel().close();
@@ -131,6 +128,5 @@ public class Server {
             selector.close();
         } catch (IOException ignored) {
         }
-        killed = true;
     }
 }

@@ -79,6 +79,7 @@ public class App {
                             NotCompleteDownloaded element = list.get(i);
                             System.out.println(" ==> " + i + ": " + Math.round(element.downloadPercent() * 100. * 100.) / 100. + "% - " + element.name());
                         }
+                        System.out.print(" ==> ");
                         String value = scanner.nextLine();
                         int intValue = Integer.parseInt(value);
                         if (intValue >= list.size()) {
@@ -90,6 +91,7 @@ public class App {
                         ArrayList<String> ipList = new ArrayList<>(Splitter.on(' ')
                                 .splitToList(scanner.nextLine()));
                         core.resumeDownloading(list.get(intValue).infoHash(), ipList);
+                        System.out.println(" ==> Resumed");
                     }
                     case "exit" -> {
                         throw new StopException();
