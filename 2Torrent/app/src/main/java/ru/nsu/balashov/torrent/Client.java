@@ -54,6 +54,30 @@ public class Client {
         }
     }
 
+    public boolean isDownloading(ByteBuffer infoHash) {
+        return piecesSelector.contains(infoHash);
+    }
+
+    public void addSources(ByteBuffer infoHash, ArrayList<String> ipWithPortsList) throws KilledException {
+        if (killed) {
+            throw new KilledException("killed");
+        }
+        for (String ipPort : ipWithPortsList) {
+            List<String> bufList = Splitter.on(':').splitToList(ipPort);
+            if (bufList.size() != 2) {
+                continue;
+            }
+            String ip = bufList.get(0);
+            int port = Integer.parseInt(bufList.get(1));
+            try {
+                SocketChannel socketChannel = SocketChannel.open(new InetSocketAddress(ip, port));
+                socketChannel.configureBlocking(false);
+                socketChannel.register(channelsSelector, SelectionKey.OP_READ, new ChannelData(infoHash, byteBufferSize));
+            } catch (IOException ignore) {
+            }
+        }
+    }
+
 
     public void startDownload() throws KilledException, IOException {
         if (killed) {
@@ -159,7 +183,7 @@ public class Client {
                                 System.out.println("NOTHING TO DOWNLOAD");
                                 key.cancel();
                                 socketChannel.close();
-                                if (!piecesSelector.havePieces(channelData.getInfoHash())) {
+                                if (piecesSelector.havePieces(channelData.getInfoHash())) {
                                     piecesSelector.unregister(channelData.getInfoHash());
                                 }
                                 break;

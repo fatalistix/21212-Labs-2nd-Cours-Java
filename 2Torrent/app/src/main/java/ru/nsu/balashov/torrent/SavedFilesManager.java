@@ -15,7 +15,7 @@ public class SavedFilesManager {
     private record TorrentInfo(SerializableDownloadedInfo serializableInfo, FileWrapper file) {}
     private record SerializableDownloadedInfo(String pathToDownloaded, byte[][] sha1Sums, long singleFileLength, String name,
                                               long pieceLength, byte[] infoHash) {}
-    public final static String pathToJson = System.getProperty("user.home") + "/.config/xf/Saved1.json";
+    public final static String pathToJson = System.getProperty("user.home") + "/.config/xf/Saved.json";
     private final ConcurrentHashMap<ByteBuffer, TorrentInfo> allDownloadedInfo = new ConcurrentHashMap<>();
     private final Gson gson = new GsonBuilder().create();
     private final File jsonFile;
@@ -110,6 +110,19 @@ public class SavedFilesManager {
             return allDownloadedInfo.get(infoHash).file().getNumberOfPieces();
         }
         return -1;
+    }
+
+    public ArrayList<NotCompleteDownloaded> getNotCompleteDownloadedList() {
+        ArrayList<NotCompleteDownloaded> notCompleteDownloadedArrayList = new ArrayList<>();
+        for (TorrentInfo torrentInfo : allDownloadedInfo.values()) {
+            int numOfPieces = torrentInfo.file().getNumberOfPieces();
+            int currentlyAvailable = torrentInfo.file().getCurrentlyAvailablePieces();
+            double percents = (double) currentlyAvailable / numOfPieces;
+            if (percents != 1.) {
+                notCompleteDownloadedArrayList.add(new NotCompleteDownloaded(torrentInfo.serializableInfo().name(), percents, ByteBuffer.wrap(torrentInfo.serializableInfo().infoHash())));
+            }
+        }
+        return notCompleteDownloadedArrayList;
     }
 
     public static class RecordExistsException extends Exception {

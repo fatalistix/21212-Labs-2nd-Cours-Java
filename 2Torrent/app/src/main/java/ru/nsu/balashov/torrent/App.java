@@ -68,6 +68,29 @@ public class App {
                             output.println("E==> Torrent already exists");
                         }
                     }
+                    case "resume" -> {
+                        ArrayList<NotCompleteDownloaded> list = core.getNotCompleteDownloadedList();
+                        if (list.size() == 0) {
+                            System.out.println("E==> Nothing can be downloaded");
+                            break;
+                        }
+                        output.println(" ==> Select number you want to download");
+                        for (int i = 0; i < list.size(); ++i) {
+                            NotCompleteDownloaded element = list.get(i);
+                            System.out.println(" ==> " + i + ": " + Math.round(element.downloadPercent() * 100. * 100.) / 100. + "% - " + element.name());
+                        }
+                        String value = scanner.nextLine();
+                        int intValue = Integer.parseInt(value);
+                        if (intValue >= list.size()) {
+                            System.out.println("E==> Invalid number");
+                            break;
+                        }
+                        output.println(" ==> Enter list of ip with format 'ip:port', separated via space:");
+                        output.print  (" ==> ");
+                        ArrayList<String> ipList = new ArrayList<>(Splitter.on(' ')
+                                .splitToList(scanner.nextLine()));
+                        core.resumeDownloading(list.get(intValue).infoHash(), ipList);
+                    }
                     case "exit" -> {
                         throw new StopException();
                     }

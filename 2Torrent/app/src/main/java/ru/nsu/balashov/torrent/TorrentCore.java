@@ -1,6 +1,7 @@
 package ru.nsu.balashov.torrent;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 public class TorrentCore {
@@ -113,6 +114,22 @@ public class TorrentCore {
             server.kill();
             client.kill();
         } catch (IOException ignored) {
+        }
+    }
+
+    public ArrayList<NotCompleteDownloaded> getNotCompleteDownloadedList() {
+        return savedFilesManager.getNotCompleteDownloadedList();
+    }
+
+    public void resumeDownloading(ByteBuffer infoHash, ArrayList<String> ipWithPort) throws CoreException {
+        try {
+            if (client.isDownloading(infoHash)) {
+                client.addSources(infoHash, ipWithPort);
+            } else {
+                client.newDownload(ipWithPort, infoHash);
+            }
+        } catch (KilledException e) {
+            throw new CoreException(e);
         }
     }
 

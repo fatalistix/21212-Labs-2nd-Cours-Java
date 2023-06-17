@@ -22,6 +22,7 @@ public class FileWrapper implements AutoCloseable {
         if (this.file.length() != fileLength) {
             this.file.seek(fileLength - 1);
             this.file.write(0);
+            this.file.setLength(fileLength);
         }
         this.pieceLength = pieceLength;
         this.fileLength  = fileLength;

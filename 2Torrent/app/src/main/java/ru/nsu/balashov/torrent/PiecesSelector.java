@@ -5,6 +5,7 @@ import java.nio.channels.SelectionKey;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
 
 class OneHashPiecesSelector {
 //    private final HashSet<PieceWithKeys> piecesInUse     = new HashSet<>();
@@ -106,7 +107,7 @@ class OneHashPiecesSelector {
 
 
 public class PiecesSelector {
-    private final HashMap<ByteBuffer, OneHashPiecesSelector> hashToSelectorHM = new HashMap<>();
+    private final ConcurrentHashMap<ByteBuffer, OneHashPiecesSelector> hashToSelectorHM = new ConcurrentHashMap<>();
 
     public PiecesSelector() {}
 
@@ -127,6 +128,9 @@ public class PiecesSelector {
 //            hashToSelectorHM.get(infoHash).deselect(index);
 //        }
 //    }
+    public boolean contains(ByteBuffer infoHash) {
+        return hashToSelectorHM.contains(infoHash);
+    }
     public void deselectPiece(ByteBuffer infoHash, SelectionKey key, boolean success) {
         if (hashToSelectorHM.containsKey(infoHash)) {
             hashToSelectorHM.get(infoHash).deselect(key, success);
