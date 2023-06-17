@@ -4,20 +4,17 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SavedFilesManager {
-    private record TorrentInfo(SerializableDownloadedInfo serializableInfo, FileWithBitmask file) {}
+    private record TorrentInfo(SerializableDownloadedInfo serializableInfo, FileWrapper file) {}
     private record SerializableDownloadedInfo(String pathToDownloaded, byte[][] sha1Sums, long singleFileLength, String name,
                                               long pieceLength, byte[] infoHash) {}
-    private record FileWithBitmask(FileWrapper fileWrapper, byte[] bitmask, int numOfPieces) {}
     public final static String pathToJson = System.getProperty("user.home") + "/.config/xf/Saved1.json";
     private final ConcurrentHashMap<ByteBuffer, TorrentInfo> allDownloadedInfo = new ConcurrentHashMap<>();
     private final Gson gson = new GsonBuilder().create();
@@ -39,47 +36,14 @@ public class SavedFilesManager {
                     SerializableDownloadedInfo instance = gson.fromJson(dataJe, SerializableDownloadedInfo.class);
                     System.out.println(instance);
                     try {
-                        FileWrapper fileWrapper = new FileWrapper(instance.pathToDownloaded(), (int) instance.pieceLength(), instance.singleFileLength());
-                        byte[] existingParts = createExistingPartsBitmask(instance, fileWrapper);
-                        if (existingParts != null) {
-                            allDownloadedInfo.put(ByteBuffer.wrap(instance.infoHash()), new TorrentInfo(instance,
-                                    new FileWithBitmask(fileWrapper, existingParts, countNumOfPieces(instance))));
-                        }
+                        FileWrapper fileWrapper = new FileWrapper(instance.pathToDownloaded(), (int) instance.pieceLength(), instance.singleFileLength(), instance.sha1Sums());
+                        allDownloadedInfo.put(ByteBuffer.wrap(instance.infoHash()), new TorrentInfo(instance, fileWrapper));
                     } catch (IOException ignored) {
 
                     }
                 }
             }
         }
-    }
-
-    private int countNumOfPieces(SerializableDownloadedInfo downloadedInfo) {
-        return (int) (downloadedInfo.singleFileLength() / downloadedInfo.pieceLength()
-                + ((downloadedInfo.singleFileLength() % downloadedInfo.pieceLength() == 0) ? 0 : 1));
-    }
-
-    private byte[] createExistingPartsBitmask(final SerializableDownloadedInfo downloadedInfo, FileWrapper file) {
-        int numOfPieces = countNumOfPieces(downloadedInfo);
-        byte[] pieceBuffer = new byte[(int) downloadedInfo.pieceLength()];
-        byte[] bitfield = new byte[numOfPieces / Byte.SIZE + ((numOfPieces % Byte.SIZE == 0) ? 0 : 1)];
-        int readBytes;
-        try {
-            for (int i = 0; i < numOfPieces; ++i) {
-                readBytes = file.readPiece(pieceBuffer, i);
-                if (readBytes == downloadedInfo.pieceLength()) {
-                    if (Arrays.equals(downloadedInfo.sha1Sums()[i], DigestUtils.sha1(pieceBuffer))) {
-                        bitfield[i / 8] |= (1 << (7 - (i % 8)));
-                    }
-                } else {
-                    if (Arrays.equals(downloadedInfo.sha1Sums()[i], DigestUtils.sha1(Arrays.copyOf(pieceBuffer, readBytes)))) {
-                        bitfield[i / 8] |= (1 << (7 - (i % 8)));
-                    }
-                }
-            }
-        } catch (IOException e) {
-            return null;
-        }
-        return bitfield;
     }
 
     public void registerDownloaded(TorrentFileData torrentFileData, String pathToDownloaded) throws RecordExistsException, IOException {
@@ -89,10 +53,8 @@ public class SavedFilesManager {
         SerializableDownloadedInfo sDInfo = new SerializableDownloadedInfo(pathToDownloaded,
                 torrentFileData.getSha1Sums(), torrentFileData.getSingleFileLength(),
                 torrentFileData.getTorrentName(), torrentFileData.getPieceLength(), torrentFileData.getInfoHash().array());
-        FileWrapper fileWrapper = new FileWrapper(pathToDownloaded, (int) torrentFileData.getPieceLength(), torrentFileData.getSingleFileLength());
-        byte[] existingParts = createExistingPartsBitmask(sDInfo, fileWrapper);
-        int numOfPieces = countNumOfPieces(sDInfo);
-        allDownloadedInfo.put(torrentFileData.getInfoHash(), new TorrentInfo(sDInfo, new FileWithBitmask(fileWrapper, existingParts, numOfPieces)));
+        FileWrapper fileWrapper = new FileWrapper(pathToDownloaded, (int) torrentFileData.getPieceLength(), torrentFileData.getSingleFileLength(), torrentFileData.getSha1Sums());
+        allDownloadedInfo.put(torrentFileData.getInfoHash(), new TorrentInfo(sDInfo, fileWrapper));
     }
 
     public synchronized void storeDownloaded() throws IOException {
@@ -109,7 +71,7 @@ public class SavedFilesManager {
         if (!allDownloadedInfo.containsKey(infoHash)) {
             return null;
         }
-        return allDownloadedInfo.get(infoHash).file().bitmask();
+        return allDownloadedInfo.get(infoHash).file().getBitmask();
     }
 
 
@@ -118,7 +80,7 @@ public class SavedFilesManager {
             return null;
         }
         try {
-            return allDownloadedInfo.get(infoHash).file().fileWrapper().readPiece(index);
+            return allDownloadedInfo.get(infoHash).file().readPiece(index);
         } catch (IOException e) {
             return null;
         }
@@ -126,8 +88,8 @@ public class SavedFilesManager {
 
     public void writePiece(ByteBuffer infoHash, byte[] piece, int pieceIndex) throws IOException {
         if (allDownloadedInfo.containsKey(infoHash)) {
-            allDownloadedInfo.get(infoHash).file().fileWrapper().writePiece(piece, pieceIndex);
-            allDownloadedInfo.get(infoHash).file().bitmask()[pieceIndex / 8] |= (1 >> (7 - pieceIndex % 8)) & 1;
+            allDownloadedInfo.get(infoHash).file().writePiece(piece, pieceIndex);
+//            allDownloadedInfo.get(infoHash).file().bitmask()[pieceIndex / 8] |= (1 >> (7 - pieceIndex % 8)) & 1;
         }
     }
 
@@ -145,7 +107,7 @@ public class SavedFilesManager {
 
     public int getNumOfPieces(ByteBuffer infoHash) {
         if (allDownloadedInfo.containsKey(infoHash)) {
-            return allDownloadedInfo.get(infoHash).file().numOfPieces();
+            return allDownloadedInfo.get(infoHash).file().getNumberOfPieces();
         }
         return -1;
     }

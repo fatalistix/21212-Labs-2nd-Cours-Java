@@ -1,52 +1,32 @@
 package ru.nsu.balashov.torrent;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class FileWrapper implements AutoCloseable{
+public class FileWrapper implements AutoCloseable {
     private final RandomAccessFile file;
 //    private byte[] bitfield;
     private final long fileLength;
     private final int pieceLength;
     private final Object monitor = this;
+    private final byte[] bitmask;
+    private final int numOfPieces;
+    private int currentlyAvailablePieces = 0;
 
-    public FileWrapper(String pathToFile, int pieceLength, long fileLength) throws IOException {
+    public FileWrapper(String pathToFile, int pieceLength, long fileLength, byte[][] shaSums) throws IOException {
         this.file = new RandomAccessFile(pathToFile, "rw");
         if (this.file.length() != fileLength) {
             this.file.seek(fileLength - 1);
             this.file.write(0);
         }
-//        this.fileLength = fileLength;
         this.pieceLength = pieceLength;
-        this.fileLength = fileLength;
-//        int numOfPieces = fileLength / pieceLength + ((fileLength % pieceLength == 0) ? 0 : 1);
-//        this.bitfield = new byte[numOfPieces / Byte.SIZE
-//                + ((numOfPieces % Byte.SIZE == 0) ? 0 : 1)];
-//
-//        byte[] pieceBuffer = new byte[pieceLength];
-//        int readBytes;
-//        try {
-//            file.seek(0);
-//            for (int i = 0; i < numOfPieces; ++i) {
-//                readBytes = file.read(pieceBuffer);
-//                if (readBytes == pieceLength) {
-//                    if (Arrays.equals(sha1Sums[i].getBytes(StandardCharsets.US_ASCII),
-//                            pieceBuffer)) {
-//                        bitfield[i / 8] |= (1 << (7 - (i % 8)));
-//                    }
-//                } else {
-//                    if (Arrays.equals(sha1Sums[i].getBytes(StandardCharsets.US_ASCII),
-//                            Arrays.copyOf(pieceBuffer, readBytes))) {
-//                        bitfield[i / 8] |= (1 << (7 - (i % 8)));
-//                    }
-//                }
-//            }
-//        } catch (IOException e) {
-//            file.close();
-//        }
-//
+        this.fileLength  = fileLength;
+        this.numOfPieces = countNumOfPieces((int) fileLength, pieceLength);
+        this.bitmask = createExistingPartsBitmask(shaSums);
     }
 
     @Override
@@ -63,6 +43,7 @@ public class FileWrapper implements AutoCloseable{
         synchronized (monitor) {
             file.seek((long) index * pieceLength);
             file.write(piece);
+            ++currentlyAvailablePieces;
         }
     }
 
@@ -112,5 +93,47 @@ public class FileWrapper implements AutoCloseable{
 
         }
         return pieces;
+    }
+
+    public byte[] getBitmask() {
+        synchronized (monitor) {
+            return bitmask;
+        }
+    }
+
+    public int getNumberOfPieces() {
+        return numOfPieces;
+    }
+
+    public int getCurrentlyAvailablePieces() {
+        synchronized (monitor) {
+            return currentlyAvailablePieces;
+        }
+    }
+
+
+    private int countNumOfPieces(int fileLength, int pieceLength) {
+        return (fileLength / pieceLength) + ((fileLength % pieceLength == 0) ? 0 : 1);
+    }
+
+    private byte[] createExistingPartsBitmask(byte[][] shaSums) throws IOException {
+        byte[] pieceBuffer = new byte[pieceLength];
+        byte[] bitfield = new byte[numOfPieces / Byte.SIZE + ((numOfPieces % Byte.SIZE == 0) ? 0 : 1)];
+        int readBytes;
+        for (int i = 0; i < numOfPieces; ++i) {
+            readBytes = this.readPiece(pieceBuffer, i);
+            if (readBytes == pieceLength) {
+                if (Arrays.equals(shaSums[i], DigestUtils.sha1(pieceBuffer))) {
+                    bitfield[i / 8] |= (1 << (7 - (i % 8)));
+                    ++currentlyAvailablePieces;
+                }
+            } else {
+                if (Arrays.equals(shaSums[i], DigestUtils.sha1(Arrays.copyOf(pieceBuffer, readBytes)))) {
+                    bitfield[i / 8] |= (1 << (7 - (i % 8)));
+                    ++currentlyAvailablePieces;
+                }
+            }
+        }
+        return bitfield;
     }
 }
