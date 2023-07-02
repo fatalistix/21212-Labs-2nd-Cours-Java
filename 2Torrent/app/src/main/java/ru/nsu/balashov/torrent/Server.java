@@ -17,7 +17,7 @@ import java.util.Iterator;
 
 public class Server {
     private final Selector selector;
-    private final static int DEFAULT_LISTENING_PORT = 6967;
+    private final static int DEFAULT_LISTENING_PORT = 6969;
     private final static int DEFAULT_BUFFER_SIZE = 2 * 1024 * 1024;
     private int byteBufferSize = DEFAULT_BUFFER_SIZE;
     private int listeningPort = DEFAULT_LISTENING_PORT;

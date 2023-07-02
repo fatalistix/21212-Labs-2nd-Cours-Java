@@ -7,8 +7,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
+
+/**
+ * This <code>class</code> is responsible for managing pieces for one <i>torrent</i>, which is represented by <i>it's info hash</i>.<br/>
+ * Its logic is a bit similar to <code>Selector</code> class logic: there are <code>HashSet and HashMap</code> instances. First is responsible for
+ */
 class OneHashPiecesSelector {
-//    private final HashSet<PieceWithKeys> piecesInUse     = new HashSet<>();
     private final HashSet<PieceWithKeys> availablePieces = new HashSet<>();
     private final HashMap<SelectionKey, PieceWithKeys> keyToPieceInUse = new HashMap<>();
 
@@ -65,15 +69,6 @@ class OneHashPiecesSelector {
         }
     }
 
-//    public void removeAssociation(SelectionKey key, int index) {
-//        for (PieceWithKeys piece : availablePieces) {
-//            if (piece.getIndex() == index && piece.haveAssociation(key)) {
-//                piece.removeAssociation(key);
-//                return;
-//            }
-//        }
-//    }
-
     public void removeAllAssociations(SelectionKey key) {
         for (PieceWithKeys piece : availablePieces) {
             if (piece.haveAssociation(key)) {
@@ -91,17 +86,6 @@ class OneHashPiecesSelector {
     public boolean havePieces() {
         return !availablePieces.isEmpty() || !keyToPieceInUse.isEmpty();
     }
-
-//    public void removeAvailableIndex(int index) {
-//        Iterator<PieceWithKeys> iter = availablePieces.iterator();
-//        while (iter.hasNext()) {
-//            PieceWithKeys piece = iter.next();
-//            if (piece.getIndex() == index) {
-//                iter.remove();
-//                return;
-//            }
-//        }
-//    }
 }
 
 
@@ -123,11 +107,7 @@ public class PiecesSelector {
         }
         return -1;
     }
-//    public void deselectPiece(ByteBuffer infoHash, int index) {
-//        if (hashToSelectorHM.containsKey(infoHash)) {
-//            hashToSelectorHM.get(infoHash).deselect(index);
-//        }
-//    }
+
     public boolean contains(ByteBuffer infoHash) {
         return hashToSelectorHM.contains(infoHash);
     }
@@ -141,11 +121,6 @@ public class PiecesSelector {
             hashToSelectorHM.get(infoHash).addAssociation(key, bitfield);
         }
     }
-//    public void removeAssociation(ByteBuffer infoHash, SelectionKey key, int index) {
-//        if (hashToSelectorHM.containsKey(infoHash)) {
-//            hashToSelectorHM.get(infoHash).removeAssociation(key, index);
-//        }
-//    }
 
     public void removeAllAssociations(ByteBuffer infoHash, SelectionKey key) {
         if (hashToSelectorHM.containsKey(infoHash)) {
@@ -159,10 +134,4 @@ public class PiecesSelector {
         }
         return false;
     }
-
-//    public void removeAvailableIndex(ByteBuffer infoHash, int index) {
-//        if (hashToSelectorHM.containsKey(infoHash)) {
-//            hashToSelectorHM.get(infoHash).removeAvailableIndex(index);
-//        }
-//    }
 }

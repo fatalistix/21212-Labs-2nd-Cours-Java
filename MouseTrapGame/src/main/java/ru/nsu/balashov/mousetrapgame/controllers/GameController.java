@@ -254,14 +254,28 @@ public class GameController implements SwitchingController {
             }
 
 
-            if (shiftByOneCell(mouseEvent.getX() - startDragPosX) ||
-                    shiftByOneCell(mouseEvent.getY() - startDragPosY)) {
-                if (model.move(getCellByMousePos(mouseEvent.getX()) + cellShiftByMouseShift(mouseEvent.getX() - startDragPosX),
-                        getCellByMousePos(mouseEvent.getY()) + cellShiftByMouseShift(mouseEvent.getY() - startDragPosY))) {
+//            if (shiftByOneCell(mouseEvent.getX() - startDragPosX) ||
+//                    shiftByOneCell(mouseEvent.getY() - startDragPosY)) {
+//                if (model.move(getCellByMousePos(mouseEvent.getX()) + cellShiftByMouseShift(mouseEvent.getX() - startDragPosX),
+//                        getCellByMousePos(mouseEvent.getY()) + cellShiftByMouseShift(mouseEvent.getY() - startDragPosY))) {
+//                    startDragPosX = getPixelByCord(model.getUpdatedX()) - imageShiftX;
+//                    startDragPosY = getPixelByCord(model.getUpdatedY()) - imageShiftY;
+//                } else {
+////                    System.out.println(mouseEvent.getX() + " : " + mouseEvent.getY() + " : " + startDragPosX + " : " + startDragPosY);
+//                    movePictureToCell(model.getUpdatedX(), model.getUpdatedY(), model.getSelectedForDraggingId());
+//                }
+//            }
+            if ((model.canSelectedBeMovedRight() || model.canSelectedBeMovedLeft()) && shiftByOneCell(mouseEvent.getX() - startDragPosX)) {
+                if (model.move(model.getSelectedX() + cellShiftByMouseShift(mouseEvent.getX() - startDragPosX), model.getSelectedY())) {
                     startDragPosX = getPixelByCord(model.getUpdatedX()) - imageShiftX;
+                } else {
+                    movePictureToCell(model.getUpdatedX(), model.getUpdatedY(), model.getSelectedForDraggingId());
+                }
+            }
+            if ((model.canSelectedBeMovedDown() || model.canSelectedBeMovedUp()) && shiftByOneCell(mouseEvent.getY() - startDragPosY)) {
+                if (model.move(model.getSelectedX(), model.getSelectedY() + cellShiftByMouseShift(mouseEvent.getY() - startDragPosY))) {
                     startDragPosY = getPixelByCord(model.getUpdatedY()) - imageShiftY;
                 } else {
-//                    System.out.println(mouseEvent.getX() + " : " + mouseEvent.getY() + " : " + startDragPosX + " : " + startDragPosY);
                     movePictureToCell(model.getUpdatedX(), model.getUpdatedY(), model.getSelectedForDraggingId());
                 }
             }
@@ -362,9 +376,34 @@ public class GameController implements SwitchingController {
     }
 
     @FXML
-    private void onBaseGridDragged() {
+    private void onBaseGridDragged(MouseEvent mouseEvent) {
         if (!mouseOnImagePane && model.canSelectedBeDragged()) {
-            movePictureToCell(model.getUpdatedX(), model.getUpdatedY(), model.getSelectedForDraggingId());
+            //            movePictureToCell(model.getUpdatedX(), model.getUpdatedY(), model.getSelectedForDraggingId());
+
+            double shiftY = baseGridPane.getLayoutY() - imageFieldPane.getLayoutY();
+            double shiftX = baseGridPane.getLayoutX() - imageFieldPane.getLayoutX();
+            if (model.canSelectedBeMovedRight() && mouseEvent.getX() + shiftX >= startDragPosX ||
+                    model.canSelectedBeMovedLeft() && mouseEvent.getX() + shiftX <= startDragPosX) {
+                graphicsPlayableObjects.get(model.getSelectedForDraggingId()).setX(mouseEvent.getX() + shiftX + imageShiftX);
+            }
+            if (model.canSelectedBeMovedUp() && mouseEvent.getY() + shiftY <= startDragPosY ||
+                    model.canSelectedBeMovedDown() && mouseEvent.getY() + shiftY >= startDragPosY) {
+                graphicsPlayableObjects.get(model.getSelectedForDraggingId()).setY(mouseEvent.getY() + shiftY + imageShiftY);
+            }
+            if ((model.canSelectedBeMovedRight() || model.canSelectedBeMovedLeft()) && shiftByOneCell(mouseEvent.getX() + shiftX - startDragPosX)) {
+                if (model.move(model.getSelectedX() + cellShiftByMouseShift(mouseEvent.getX() + shiftX - startDragPosX), model.getSelectedY())) {
+                    startDragPosX = getPixelByCord(model.getUpdatedX()) - imageShiftX;
+                } else {
+                    movePictureToCell(model.getUpdatedX(), model.getUpdatedY(), model.getSelectedForDraggingId());
+                }
+            }
+            if ((model.canSelectedBeMovedDown() || model.canSelectedBeMovedUp()) && shiftByOneCell(mouseEvent.getY() + shiftY - startDragPosY)) {
+                if (model.move(model.getSelectedX(), model.getSelectedY() + cellShiftByMouseShift(mouseEvent.getY() + shiftY - startDragPosY))) {
+                    startDragPosY = getPixelByCord(model.getUpdatedY()) - imageShiftY;
+                } else {
+                    movePictureToCell(model.getUpdatedX(), model.getUpdatedY(), model.getSelectedForDraggingId());
+                }
+            }
         }
     }
 

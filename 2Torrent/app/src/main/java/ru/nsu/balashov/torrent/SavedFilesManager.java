@@ -15,7 +15,7 @@ public class SavedFilesManager {
     private record TorrentInfo(SerializableDownloadedInfo serializableInfo, FileWrapper file) {}
     private record SerializableDownloadedInfo(String pathToDownloaded, byte[][] sha1Sums, long singleFileLength, String name,
                                               long pieceLength, byte[] infoHash) {}
-    public final static String pathToJson = System.getProperty("user.home") + "/.config/xf/Saved2.json";
+    public final static String pathToJson = System.getProperty("user.home") + "/.config/xf/Saved1.json";
     private final ConcurrentHashMap<ByteBuffer, TorrentInfo> allDownloadedInfo = new ConcurrentHashMap<>();
     private final Gson gson = new GsonBuilder().create();
     private final File jsonFile;
